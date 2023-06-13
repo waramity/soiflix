@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1,minimum-scale=1.0"
+    />
+    <meta property="og:locale" content="th_TH" />
+    <meta property="og:site_name" content="Soiflix | คัดสรรสิ่งดีๆจากยูทูป" />
+
+    <meta property="og:title" content="{{title}}" />
+    <meta
+      property="article:publisher"
+      content="https://www.facebook.com/soiflix95"
+    />
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+    {% if title %}
+    <title>{{ title }} | SoiFlix</title>
+    {% else %}
+    <title>SoiFlix | หนังและซีรี่ยส์ที่ชวนคิดถึง</title>
+    {% endif %}
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+      integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Google Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1334778057140315"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-EJ392E5XPD"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-EJ392E5XPD");
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
+    <!---Google AMP Script-->
+    <script
+      async
+      custom-element="amp-ad"
+      src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"
+    ></script>
+    <!---End Google AMP Script--->
+
+    <!--Craftpip BOOTSTRAP-FULLSCREEN-SELECT files -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='libs/css/bootstrap-fullscreen-select.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='libs/css/mobile.css') }}"
+    />
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', filename='libs/js/bootstrap-fullscreen-select.js') }}"
+    ></script>
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='libs/css/swiper-bundle.min.css') }}"
+    />
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', filename='libs/js/swiper-bundle.min.js') }}"
+    ></script>
+
+    <!--END Craftpip BOOTSTRAP-FULLSCREEN-SELECT files-->
+    <style></style>
+    <style>
+      html,
+      body {
+        max-width: 100%;
+        /* contain: paint; */
+        overflow-x: hidden;
+      }
+      .movie__cover {
+        transition: transform 250ms;
+        background-color: black;
+
+        border-radius: 10px;
+      }
+      .genre__cover {
+        -webkit-transition: transform 250ms;
+        transition: transform 250ms;
+      }
+      .movie__header {
+        font-size: 18px;
+        /* color: #c6c6c6; */
+        color: #ffffff;
+        /* padding: 10px 5px; */
+        margin-top: 0.7em;
+      }
+      .content__new-ep {
+        font-size: 1em;
+        margin-right: 1.5em;
+        /* color: #8a8a8a; */
+      }
+      .content-box {
+        margin-bottom: 2em;
+        margin-top: 1em;
+      }
+      .movie__poster {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+      .movie__link {
+        text-decoration: none;
+      }
+      .topic__header {
+        color: white;
+      }
+      .genre__link {
+        padding-top: 500px;
+        text-decoration: none;
+        color: white;
+      }
+      .suggest__thumbnail {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+      .semi-movie__poster {
+        width: 100%;
+        /* margin-bottom: 10px; */
+        border-radius: 3px;
+      }
+
+      .nopadding {
+        padding: 3px !important;
+      }
+
+      .mobile-tablet-display {
+        display: none;
+      }
+
+      .mobile-display {
+        display: none;
+      }
+
+      .tablet-display {
+        display: none;
+      }
+
+      .mobile-tablet__thumbnail {
+        border-radius: 3px;
+        width: 100%;
+        height: auto;
+        -webkit-user-drag: none;
+        -khtml-user-drag: none;
+        -moz-user-drag: none;
+        -o-user-drag: none;
+        user-drag: none;
+      }
+      /* [data-src].mobile-tablet__thumbnail::before {
+        content: "";
+        display: block; */
+      /* padding-top: 56.25%; */
+      /* height: 360px; */
+      /* } */
+
+      .col-xl-2half {
+        position: relative;
+        min-height: 1px;
+        padding-right: 15px;
+        padding-left: 15px;
+      }
+
+      @media (min-width: 1400px) {
+      }
+      @media (min-width: 881px) {
+        html,
+        body {
+          overflow-x: hidden;
+        }
+      }
+      @media (min-width: 992px) {
+        .movie__cover:hover {
+          transform: scale(1.48);
+          z-index: 1;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+            0 6px 20px 0 rgba(0, 0, 0, 0.19);
+          transition-delay: 0.7s;
+        }
+
+        .genre__cover:hover {
+          transform: scale(1.28);
+          z-index: 1;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+            0 6px 20px 0 rgba(0, 0, 0, 0.19);
+          transition-delay: 0.7s;
+        }
+      }
+
+      @media (min-width: 880px) {
+        .col-xl-2half {
+          float: left;
+        }
+        .col-xl-2half {
+          width: 20%;
+        }
+      }
+
+      .genre__description-list {
+        color: #979797;
+        font-size: 1em;
+      }
+
+      .genre__description-swiper-list {
+        color: #979797;
+        font-size: 0.95em;
+        padding-right: 1.5em;
+      }
+
+      @media (max-width: 576px) {
+        .mobile-display {
+          display: inline;
+        }
+      }
+
+      @media (min-width: 577px) and (max-width: 880px) {
+        .tablet-display {
+          display: inline;
+        }
+      }
+
+      @media (max-width: 880px) {
+        .mobile-tablet-hidden {
+          display: none;
+        }
+        /* .mobile-tablet-display {
+          display: inline-block;
+        } */
+        .mobile-tablet-display {
+          display: inline;
+        }
+
+        .movie__header {
+          /* margin-bottom: 3em; */
+          font-weight: bold;
+          padding: 0.5em 0.5em 0 0.5em;
+          margin-bottom: 0;
+          margin-top: 0;
+          font-size: 20px;
+          /* letter-spacing: 0.5px; */
+        }
+
+        .genre__description-list {
+          color: #979797;
+          padding: 0.5em 0.5em 0em 0.5em;
+          font-size: 1em;
+        }
+
+        .content__new-ep {
+          padding: 0em 0.5em 0em 0.7em;
+          /* letter-spacing: 0.5px; */
+          margin-right: 0em;
+        }
+      }
+    </style>
+    <style>
+      .series__content {
+        height: 500px;
+        margin-bottom: 10px;
+      }
+
+      .movie__content {
+        margin-bottom: 10px;
+      }
+
+      .series__title {
+        color: #c6c6c6;
+      }
+      .description__header {
+        color: #c6c6c6;
+      }
+      .series__description {
+        color: #c6c6c6;
+      }
+
+      .episode__thumbnail {
+        width: 100%;
+        margin-top: 5px;
+      }
+
+      .genre__badge {
+        margin-bottom: 25px;
+      }
+
+      .related-movie__header {
+        color: white;
+        margin: 30px 0;
+      }
+
+      .series__actor {
+        color: #c6c6c6;
+      }
+      .series__tag-label-box {
+        margin-bottom: 15px;
+      }
+      .series__tag-label {
+        color: #777;
+      }
+      .series__season {
+        color: #c6c6c6;
+      }
+      .series__published-year {
+        color: #c6c6c6;
+      }
+      .list-group {
+        max-height: 500px;
+        margin-bottom: 10px;
+        overflow: scroll;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .episode__btn {
+        width: 100%;
+      }
+
+      .tag__link {
+        text-decoration: none;
+        color: #c6c6c6;
+      }
+
+      @media (min-width: 360px) {
+        .series__content {
+          height: 270px;
+        }
+        .movie__content {
+          height: 270px;
+        }
+        .problem-episode__btn {
+          margin-top: 10px;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .series__content {
+          height: 500px;
+        }
+        .movie__content {
+          height: 500px;
+        }
+        .problem-episode__btn {
+          margin-top: 0px;
+        }
+      }
+      @media (min-width: 1200px) {
+        .series__content {
+          height: 500px;
+        }
+        .movie__content {
+          height: 720px;
+        }
+        .problem-episode__btn {
+          margin-top: 0px;
+        }
+      }
+    </style>
+
+    <style>
+      /* .list-group-item.active {
+        border-color: blue !important;
+      } */
+      .list-group > button {
+        border-radius: 100px;
+        margin: 10px 5px;
+      }
+      .list-group > button > a {
+        text-decoration: none;
+        color: inherit;
+      }
+    </style>
+
+    <style>
+      .mobile-tablet__topic-header {
+        color: #d3dedc;
+        margin: 20px 0;
+        font-weight: bold;
+      }
+      .google-ads {
+        margin: 0.7em 0;
+      }
+      .mobile__genre-header {
+        font-size: 1em;
+        color: #ffffff;
+        margin-left: 0.3em;
+        margin-top: 0.5em;
+        margin-right: 0.3em;
+      }
+      .mobile__genre-list {
+        color: #979797;
+        margin: 0em 0.5em 0.5em 0.5em;
+        font-size: 0.8em;
+      }
+
+      .mobile__content-box {
+        margin-bottom: 2em;
+        margin-top: 1em;
+      }
+    </style>
+
+    <script>
+      function AddReadMore() {
+        //This limit you can set after how much characters you want to show Read More.
+        var carLmt = 250;
+        // Text to show when text is collapsed
+        var readMoreTxt = " ... ดูเพิ่มเติม";
+        // Text to show when text is expanded
+        var readLessTxt = " ย่อเนื้อหา";
+
+        //Traverse all selectors with this class and manupulate HTML part to show Read More
+        $(".addReadMore").each(function () {
+          if ($(this).find(".firstSec").length) return;
+
+          var allstr = $(this).text();
+          if (allstr.length > carLmt) {
+            var firstSet = allstr.substring(0, carLmt);
+            var secdHalf = allstr.substring(carLmt, allstr.length);
+            var strtoadd =
+              firstSet +
+              "<span class='SecSec'>" +
+              secdHalf +
+              "</span><span class='readMore'  title='Click to Show More'>" +
+              readMoreTxt +
+              "</span><span class='readLess' title='Click to Show Less'>" +
+              readLessTxt +
+              "</span>";
+            $(this).html(strtoadd);
+          }
+        });
+        //Read More and Read Less Click Event binding
+        $(document).on("click", ".readMore,.readLess", function () {
+          $(this)
+            .closest(".addReadMore")
+            .toggleClass("showlesscontent showmorecontent", 1000);
+        });
+      }
+      $(function () {
+        //Calling function after Page Load
+        AddReadMore();
+      });
+    </script>
+    <!--- ปุ่มดูเพิ่มเติม ตรงคำอธิบาย/เรื่องย่อ ใต้วิดีโอ --->
+    <style>
+      .addReadMore.showlesscontent .SecSec,
+      .addReadMore.showlesscontent .readLess {
+        display: none;
+      }
+
+      .addReadMore.showmorecontent .readMore {
+        display: none;
+      }
+
+      .addReadMore .readMore,
+      .addReadMore .readLess {
+        font-weight: bold;
+        margin-left: 2px;
+        color: #777;
+        cursor: pointer;
+      }
+
+      .addReadMoreWrapTxt.showmorecontent .SecSec,
+      .addReadMoreWrapTxt.showmorecontent .readLess {
+        display: block;
+      }
+    </style>
+    <!--- End ปุ่มดูเพิ่มเติม ตรงคำอธิบาย/เรื่องย่อ ใต้วิดีโอ --->
+
+    <script>
+      function AddReadMoreActor() {
+        $(document).on("click", ".readMoreActor,.readLessActor", function () {
+          $(this)
+            .closest(".addReadMoreActor")
+            .toggleClass("showlesscontentActor showmorecontentActor", 1000);
+        });
+      }
+      $(function () {
+        //Calling function after Page Load
+        AddReadMoreActor();
+      });
+    </script>
+    <!--- ปุ่มดูเพิ่มเติม ตรงคำอธิบาย/เรื่องย่อ ใต้วิดีโอ --->
+    <style>
+      .addReadMoreActor.showlesscontentActor .SecSecActor,
+      .addReadMoreActor.showlesscontentActor .readLessActor {
+        display: none;
+      }
+
+      .addReadMoreActor.showmorecontentActor .readMoreActor {
+        display: none;
+      }
+
+      .addReadMoreActor .readMoreActor,
+      .addReadMoreActor .readLessActor {
+        font-weight: bold;
+        margin-left: 2px;
+        color: #777;
+        cursor: pointer;
+      }
+
+      .addReadMoreWrapTxtActor.showmorecontentActor .SecSecActor,
+      .addReadMoreWrapTxtActor.showmorecontentActor .readLessActor {
+        display: block;
+      }
+    </style>
+    <!--- End ปุ่มดูเพิ่มเติม ตรงคำอธิบาย/เรื่องย่อ ใต้วิดีโอ --->
+    <style>
+      .item {
+        position: relative;
+        /* padding-top: 20px; */
+        /* display: inline-block; */
+      }
+      .notify-badge {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        text-align: center;
+        border-radius: 10px 10px 10px 10px;
+        color: white;
+        padding: 5px 10px;
+        font-size: 14px;
+      }
+
+      .red-badge {
+        background: red;
+      }
+
+      .orange-badge {
+        background: orange;
+      }
+    </style>
+
+    <style>
+      .gallery {
+        position: relative;
+        max-width: 800px;
+        padding: 0 10;
+      }
+
+      .gallery_scroller {
+        /* snap mandatory on horizontal axis  */
+        scroll-snap-type: x mandatory;
+
+        overflow-x: scroll;
+        overflow-y: hidden;
+
+        display: flex;
+        align-items: center;
+
+        height: 300px;
+
+        /* Enable Safari touch scrolling physics which is needed for scroll snap */
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .gallery_scroller div {
+        /* snap align center  */
+        scroll-snap-align: center;
+        margin: 10px;
+        position: relative;
+      }
+
+      .gallery_scroller img {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+      }
+
+      .gallery_scroller div.colored_card {
+        min-width: 80%;
+        min-height: 100%;
+        border-radius: 10px;
+      }
+      .swiper-button-next.swiper-button-disabled,
+      .swiper-button-prev.swiper-button-disabled {
+        pointer-events: auto !important;
+      }
+
+      .new_content_scroller {
+        height: 400px;
+        scroll-snap-align: center;
+      }
+    </style>
+    <!--- End ปุ่มดูเพิ่มเติม ตรงคำอธิบาย/เรื่องย่อ ใต้วิดีโอ --->
+    <script>
+      function topFunction() {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+      }
+    </script>
+  </head>
+
+  <body style="background-color: black;">
+    <!--- Bootstrap nav ----->
+    <!-- <nav -->
+    <!--  class="navbar navbar-expand-lg navbar-light" -->
+    <!--  style=" background-color: black; margin-bottom: 30px" -->
+    <!-- > -->
+    <!--  <a class="navbar-brand" href="/"> -->
+    <!--    <img src="../static/logo.png" style="height: 55px; width: 180px; margin-left: 10px" /> -->
+    <!--  </a> -->
+    <!--  <button -->
+    <!--    class="navbar-toggler" -->
+    <!--    type="button" -->
+    <!--    data-toggle="collapse" -->
+    <!--    data-target="#navbarNav" -->
+    <!--    aria-controls="navbarNav" -->
+    <!--    aria-expanded="false" -->
+    <!--    aria-label="Toggle navigation" -->
+    <!--  > -->
+    <!--    <span class="navbar-toggler-icon"></span> -->
+    <!--  </button> -->
+
+    <!--  <style> -->
+    <!--    .nav-text { -->
+    <!--      color: white; -->
+    <!--    } -->
+    <!--  </style> -->
+    <!--  <div class="collapse navbar-collapse" id="navbarNav"> -->
+    <!--    <ul class="navbar-nav"> -->
+    <!--      <li class="nav-item"> -->
+    <!--        <a class="nav-link" href="{{ url_for('main.index') }}" -->
+    <!--          ><h4 class="nav-text">หน้าหลัก</h4> -->
+    <!--        </a> -->
+    <!--      </li> -->
+    <!--      <li class="nav-item"> -->
+    <!--        <a class="nav-link" href="{{ url_for('main.movies') }}" -->
+    <!--          ><h4 class="nav-text">หนัง</h4></a -->
+    <!--        > -->
+    <!--      </li> -->
+    <!--      <li class="nav-item"> -->
+    <!--        <a class="nav-link" href="{{ url_for('main.all_tvshows') }}" -->
+    <!--          ><h4 class="nav-text">รายการทีวี</h4></a -->
+    <!--        > -->
+    <!--      </li> -->
+    <!-- {% if current_user.is_authenticated %} -->
+    <!-- <li class="nav-item"> -->
+    <!--   <a class="nav-link" href="{{ url_for('main.profile') }}" -->
+    <!--     ><h4 class="nav-text">รายการของฉัน</h4></a -->
+    <!--   > -->
+    <!-- </li> -->
+    <!-- {% endif %} {% if not current_user.is_authenticated %} -->
+    <!-- <li class="nav-item"> -->
+    <!--   <a class="nav-link" href="{{ url_for('auth.login') }}" -->
+    <!--     ><h4 class="nav-text">เข้าสู่ระบบ</h4></a -->
+    <!--   > -->
+    <!-- </li> -->
+    <!-- <li class="nav-item"> -->
+    <!--   <a class="nav-link" href="{{ url_for('auth.signup') }}" -->
+    <!--     ><h4 class="nav-text">สมัครสมาชิก</h4></a -->
+    <!--   > -->
+    <!-- </li> -->
+    <!-- {% endif %} {% if current_user.is_authenticated %} -->
+    <!-- <li class="nav-item"> -->
+    <!--   <a class="nav-link" href="{{ url_for('auth.logout') }}" -->
+    <!--     ><h4 class="nav-text">ออกจากระบบ</h4></a -->
+    <!--   > -->
+    <!-- </li> -->
+    <!-- {% endif %} -->
+    <!-- </ul> -->
+    <!-- </div> -->
+    <!-- </nav> -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+          <img
+            src="/static/logo.png"
+            style="height: 55px; width: 180px; margin-left: 10px;"
+          />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+          <span>
+            เมนู
+          </span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a
+                class="nav-link {%if active_nav == 'main'%}active{%endif%}"
+                aria-current="page"
+                href="/"
+                >หน้าหลัก</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {%if active_nav == 'movie'%}active{%endif%}"
+                href="/movies"
+                >หนัง</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {%if active_nav == 'series'%}active{%endif%}"
+                href="/series"
+                >ละคร/ซีรี่ส์</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {%if active_nav == 'tv_show'%}active{%endif%}"
+                href="/tvshows"
+                >รายการทีวี</a
+              >
+            </li>
+            <!-- <li class="nav-item"> -->
+            <!--   <a -->
+            <!--     class="nav-link {%if active_nav == 'tv_show'%}active{%endif%}" -->
+            <!--     href="/tv-shows" -->
+            <!--     >เพลง</a -->
+            <!--   > -->
+            <!-- </li> -->
+            <!-- <li class="nav-item"> -->
+            <!--   <a -->
+            <!--     class="nav-link {%if active_nav == 'tv_show'%}active{%endif%}" -->
+            <!--     href="/tv-shows" -->
+            <!--     >รายการวิทยุ/Podcast</a -->
+            <!--   > -->
+            <!-- </li> -->
+          </ul>
+          <form
+            class="d-flex"
+            action="{{ url_for('main.search') }}"
+            method="post"
+          >
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+              name="search"
+              required="required"
+            />
+            <button class="btn btn-outline-success" type="submit">
+              Search
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+    <main role="main" class="container">
+      <!--  Support Alert -->
+
+      <!--  End Support Alert -->
+      <div class="row">
+        <div class="col-12">
+          {%block content%} {%endblock%}
+        </div>
+      </div>
+    </main>
+    <!-- Footer -->
+    <footer class="bg-dark text-center text-white mt-5">
+      <!-- Grid container -->
+      <div class="container p-4">
+        <!-- Section: Social media -->
+        <section class="mb-4">
+          <a
+            class="btn btn-outline-light btn-floating m-1"
+            href="https://www.facebook.com/Soiflix-109352821555082"
+            target="_blank"
+            role="button"
+            ><i class="fab fa-facebook-square"></i
+          ></a>
+
+          <a
+            class="btn btn-outline-light btn-floating m-1"
+            href="https://lin.ee/gK8Uoi6"
+            target="_blank"
+            role="button"
+            ><i class="fab fa-line"></i
+          ></a>
+
+          <!-- <a
+            class="btn btn-outline-light btn-floating m-1"
+            href="https://twitter.com/soiflix95"
+            target="_blank"
+            role="button"
+            ><i class="fab fa-twitter"></i
+          ></a> -->
+        </section>
+        <!-- Section: Social media -->
+      </div>
+      <!-- Grid container -->
+
+      <!-- Copyright -->
+      <div
+        class="text-center p-3"
+        style="background-color: rgba(0, 0, 0, 0.2);"
+      >
+        © 2020 Copyright: Soiflix.com
+      </div>
+      <!-- Copyright -->
+      <script>
+        lazyload();
+      </script>
+    </footer>
+    <!-- Footer -->
+  </body>
+</html>

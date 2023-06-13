@@ -1,0 +1,273 @@
+{% extends "layout.html" %} {% block content %}
+
+<style>
+  .swiper {
+    width: 100%;
+    margin: auto;
+    overflow: visible;
+  }
+
+  .swiper-slide {
+    font-size: 18px;
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+  }
+  .swiper-slide.swiper-slide-active,
+  .swiper-slide.swiper-slide-next,
+  .swiper-slide.swiper-slide-prev {
+    visibility: visible;
+  }
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: white;
+    top: 0;
+    padding: 100px 20px;
+    margin: 0;
+  }
+  .swiper-pagination-bullet {
+    background-color: white;
+  }
+  .swiper-pagination {
+    z-index: 0;
+    text-align: right;
+    padding-top: 250px;
+  }
+</style>
+
+<div class="row">
+  <!--------Section 1--------->
+
+  <div class="col-12 col-lg-12 col-xl-6" style="margin-top: 5px;">
+    <div
+      id="carouselExampleCaptions"
+      class="carousel slide"
+      data-bs-ride="carousel"
+      style="margin-top: 15px;"
+    >
+      <div class="carousel-indicators">
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="0"
+          class="active"
+          aria-current="true"
+          aria-label="Slide 1"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="1"
+          aria-label="Slide 2"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="2"
+          aria-label="Slide 3"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="3"
+          aria-label="Slide 4"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="4"
+          aria-label="Slide 5"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="5"
+          aria-label="Slide 6"
+        ></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          {{suggest_program[0]|suggest_program_carousel_filter()|safe()}}
+        </div>
+        {% for program in suggest_program[1:6] %}
+
+        <div class="carousel-item">
+          {{program|suggest_program_carousel_filter()|safe()}}
+        </div>
+        {%endfor%}
+      </div>
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-12 col-xl-6" style="margin-top: 10px;">
+    <div class="row">
+      {% for program in suggest_program[6:10] %}
+      <div class="col-6 col-lg-6 movie__cover" style="margin-top: 5px;">
+        {{program|suggest_program_filter()|safe()}}
+      </div>
+      {%endfor%}
+    </div>
+  </div>
+
+  <!--------End Section 1--------->
+  <!--- Google Adsense --->
+  <div class="col-12 text-center google-ads">
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1334778057140315"
+      crossorigin="anonymous"
+    ></script>
+    <!-- soiflix main page -->
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <!--- End Google Adsense --->
+
+  <div class="row" style="margin-bottom: 70px;">
+    <div class="col-8 col-md-10 col-lg-11" style="margin-bottom: 40px;">
+      <h2 class="topic__header">รับชมเนื้อหาแนวไหนดี?</h2>
+    </div>
+    <!-- Swiper -->
+    <div class="swiper genreSwiper">
+      <div class="swiper-wrapper">
+        {%for genre in genre_list_group_image_for_browser%}
+
+        <div class="genre__cover swiper-slide">
+          <a href="/genre/{{genre['genre_id']}}">
+            <img
+              data-src="/static/genre-icon/{{genre['genre_image']}}.jpg"
+              style="width: 100%; border-radius: 10px;"
+              class="lazyload"
+            />
+          </a>
+        </div>
+        {%endfor%}
+      </div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </div>
+
+    <!-- Initialize Swiper -->
+    <script>
+      var swiper = new Swiper(".genreSwiper", {
+        slidesPerView: 2,
+        slidesPerGroup: 2,
+        spaceBetween: 30,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+
+        breakpoints: {
+          880: {
+            slidesPerView: 6,
+            slidesPerGroup: 6,
+          },
+        },
+
+        lazy: true,
+        preloadImages: false,
+        watchOverflow: true,
+        shortSwipes: false,
+      });
+    </script>
+  </div>
+
+  {%if continue_content_arr != []%}
+  {{continue_content_arr|swiper_template_speicific_episode_link("ดูต่อ สำหรับ
+  คุณ", "continue-content", "continue_content")|safe()}} {%endif%}
+  <!--- Google AMP --->
+
+  <div class="col-12 text-center google-ads">
+    <!-- soiflix main page -->
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <!--- End Google AMP --->
+  {{trending_content|swiper_template("รายการยอดนิยมล่าสุด", "ยอดนิยม",
+  "trending_content")|safe()}}
+  {{new_content|swiper_template_new_release("เนื้อหามาใหม่",
+  "new-content-release", "new-content-release")|safe()}}
+  {{new_ep|swiper_template_new_release("ตอนล่าสุด", "new-ep-release",
+  "new-ep-release")|safe()}}
+  <!--- Google Adsense --->
+  <div class="col-12 text-center google-ads">
+    <!-- soiflix main page -->
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <!--- End Google Adsense --->
+
+  {{desktop_movie|swiper_template("หนังใหม่และล่าสุด", "movie",
+  "movie")|safe()}} {{desktop_series|swiper_template("ซีรี่ส์ใหม่และล่าสุด",
+  "series", "series")|safe()}}
+  {{desktop_tvshow|swiper_template("รายการทีวีใหม่และล่าสุด", "tvshow",
+  "tvshow")|safe()}}
+  <!--- Google AMP --->
+
+  <div class="col-12 text-center google-ads">
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <!--- End Google AMP --->
+
+  <!--- End div class row --->
+</div>
+
+{% endblock %}

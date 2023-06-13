@@ -1,0 +1,518 @@
+
+<head>
+  <meta property="og:type" content="website" />
+  <meta
+    property="og:description"
+    content="{{series['description']|striptags}}"
+  />
+  <meta property="og:url" content="https://soiflix.com/series/{{series['id']}}" />
+  <meta property="article:published_time" content="{{series['last_updated']}}" />
+  <meta
+    property="og:image"
+    content="https://soiflix.com/static/series/thumbnail/{{series['thumbnail']}}"
+  />
+  <meta property="og:image:width" content="640" />
+  <meta property="og:image:height" content="360" />
+  <meta property="og:image:type" content="image/jpg" />
+</head>
+
+{% extends "layout.html" %} {% block content %}
+
+<div class="row">
+  <!--- Google Adsense --->
+  <div class="col-12 text-center google-ads mb-3">
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1334778057140315"
+      crossorigin="anonymous"
+    ></script>
+    <!-- soiflix content page horizontal ads -->
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="6046644423"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <!--- End Google Adsense --->
+  <div class="col-12 col-md-7 col-lg-8">
+    <iframe
+      class="series__content mb-3"
+      width="100%"
+      height="100%"
+      src="https://www.youtube.com/embed/{{curr_episode['youtube_url']}}?rel=0&modestbranding=1&autohide=1&mute=0&showinfo=0&controls=1&autoplay=1"
+      title="{{curr_episode['title']}}"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe>
+    <div class="row">
+
+{%if request.MOBILE%}
+  <div class="col-12">
+      <h2 class="series__title">
+        {{series['title']}}
+      </h2>
+
+      <h6 style="color: #777">
+
+    {% if series['seasons']|length > 1 %}
+      {% for season in series['seasons']|sort(attribute="id")%}
+      {%if curr_season['id'] == season['id']%}{{season['season_title']}}{%endif%}
+        {% endfor %}
+-
+  {%endif%}
+      {%for episode in curr_season['episodes']|sort(attribute="id")%}
+{%if curr_episode['youtube_url'] == episode['youtube_url']%}{{episode['title']}}{%endif%}
+      {%endfor%}
+      </h6>
+      <hr style="height:5px; color: #777"/>
+      <span class="series__published-year">
+        <span style="color: #777;">ปีที่ฉาย:</span>
+        {{series['seasons'][0]['published_year'] - 543}}
+        <span style="color: #777;">•</span>
+      </span>
+      <span class="series__season">
+        {{series['seasons']|length}} ซีซั่น
+      </span>
+
+    <p class="series__description addReadMore showlesscontent" style="margin: 0.7em 0;">
+      {{series['description']}}
+    </p>
+  </div>
+  {%endif%}
+
+      <div class="col-6 col-md-6 mb-2">
+        {%if prev_episode is not none%}
+        <a
+          href="/tvshow/{{series['id']}}/season/{{curr_season['id']}}/episode/{{prev_episode['youtube_url']}}"
+        >
+          <button type="button" class="btn btn-primary episode__btn">
+            ตอนก่อนหน้า
+          </button>
+        </a>
+
+        {%elif prev_season is not none%}
+        <a
+          href="/tvshow/{{series['id']}}/season/{{prev_season['id']}}/episode/{{prev_season_episode['youtube_url']}}"
+        >
+          <button type="button" class="btn btn-success episode__btn">
+            ซีซั่นก่อนหน้า
+          </button>
+        </a>
+        {%endif%}
+      </div>
+      <div class="col-6 col-md-6 mb-2">
+        {%if next_episode is not none%}
+        <a
+          href="/tvshow/{{series['id']}}/season/{{curr_season['id']}}/episode/{{next_episode['youtube_url']}}"
+        >
+          <button type="button" class="btn btn-primary episode__btn">
+            ตอนต่อไป
+          </button>
+        </a>
+
+        {%elif next_season is not none%}
+        <a
+          href="/tvshow/{{series['id']}}/season/{{next_season['id']}}/episode/{{next_season_episode['youtube_url']}}"
+        >
+          <button type="button" class="btn btn-success episode__btn">
+            ซีซั่นต่อไป
+          </button>
+        </a>
+        {%endif%}
+      </div>
+
+      <div class="col-6 col-md-4 mb-2">
+        <a
+          href="/tvshow/{{series['id']}}/season/{{curr_season['id']}}/episode/{{first_episode}}"
+        >
+          <button type="button" class="btn btn-dark episode__btn">
+            ดูตอนแรก
+          </button>
+        </a>
+      </div>
+
+      <div class="col-6 col-md-4 mb-2">
+        <a
+          href="/tvshow/{{series['id']}}/season/{{curr_season['id']}}/episode/{{last_episode}}"
+        >
+          <button type="button" class="btn btn-dark episode__btn">
+            ดูตอนสุดท้าย
+          </button>
+        </a>
+      </div>
+      <div class="col-12 col-md-4 mb-3">
+        <a
+          href="https://www.youtube.com/watch?v={{curr_episode['youtube_url']}}"
+        >
+          <button
+            type="button"
+            class="btn btn-danger episode__btn problem-episode__btn"
+          >
+            ดูไม่ได้ คลิกที่นี่
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-5 col-lg-4">
+    {% if series['seasons']|length > 1 %}
+
+    <h5 class="text-white" style="margin-top: 0.5em">เลือกซีซั่น</h5>
+    {%if request.MOBILE%}
+
+        <select class="form-control mobileSelect" data-style="primary"
+         >
+
+      {% for season in series['seasons']|sort(attribute="id")%}
+      <option value="/tvshow/{{series['id']}}/season/{{season['id']}}"
+      {%if curr_season['id'] == season['id']%}selected{%endif%}
+        >{{season['season_title']}}</option
+      >
+      {% endfor %}
+    </select>
+    <script>
+          $('.mobileSelect').mobileSelect({
+    onClose: function(){
+      var urlValArr = $(this).val().split('/')
+      var pathArr = window.location.pathname.split( '/' )
+      if(urlValArr[1] == pathArr[1] && urlValArr[2] == pathArr[2] && urlValArr[3] == pathArr[3] && urlValArr[4] != pathArr[4]) {
+        window.location = $(this).val();
+      }
+    },
+    theme: 'holo',
+    style: 'btn-primary',
+    title: 'เลือกซีซั่น',
+    buttonSave: 'บันทึก',
+    buttonCancel: 'ยกเลิก',
+  });
+          </script>
+    {%else%}
+    <select
+      class="form-select"
+      aria-label="Default select example"
+      style="margin-bottom: 10px;"
+      onchange="location = this.value;"
+    >
+      {% for season in series['seasons']|sort(attribute="id")%}
+      <option value="/tvshow/{{series['id']}}/season/{{season['id']}}"
+      {%if curr_season['id'] == season['id']%}selected{%endif%}
+        >{{season['season_title']}}</option
+      >
+      {% endfor %}
+    </select>
+    {%endif%}
+    {%endif%}
+    <h5 class="text-white">เลือกตอน
+      <span style="color: #777">
+      {%for episode in curr_season['episodes']|sort(attribute="id")%}
+{%if curr_episode['youtube_url'] == episode['youtube_url']%} ({{loop.index}}/{{curr_season['episodes']|length}}){%endif%}
+      {%endfor%}
+</span>
+    </h5>
+    <div class="list-group">
+      {%for episode in curr_season['episodes']|sort(attribute="id")%}
+      <div style="height: 100px;">
+        <a
+          href="/tvshow/{{series['id']}}/season/{{curr_season['id']}}/episode/{{episode['youtube_url']}}"
+          class="list-group-item list-group-item-action bg-dark text-white {%if curr_episode['youtube_url'] == episode['youtube_url']%}active{%endif%}"
+          id="{%if curr_episode['youtube_url'] == episode['youtube_url']%}curr_episode{%endif%}"
+          data-index="{{loop.index}}"
+          aria-current="true"
+          style="height: 100px;"
+        >
+          <div class="row">
+            <div class="col-4">
+              <img
+                class="episode__thumbnail"
+                src=" http://img.youtube.com/vi/{{episode['youtube_url']}}/mqdefault.jpg"
+                alt="{{episode['title']}}"
+              />
+            </div>
+            <div class="col-8">
+              <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1" style="font-size: 14px;">
+                  {{episode['title']}}
+                </h6>
+              </div>
+              <small class="text-muted">ตอนที่ {{loop.index}}</small>
+            </div>
+          </div>
+        </a>
+      </div>
+      {%endfor%}
+    </div>
+  </div>
+  <script>
+    var episode_index = $("#curr_episode").data("index");
+    document.querySelector(".list-group").scrollTop = (episode_index - 1) * 100;
+  </script>
+
+  {%if request.MOBILE%} {%else%}
+  <div class="col-12 col-md-7 col-lg-8">
+      <h2 class="series__title">
+        {{series['title']}}
+      </h2>
+      <h5 style="color: #777">
+
+    {% if series['seasons']|length > 1 %}
+      {% for season in series['seasons']|sort(attribute="id")%}
+      {%if curr_season['id'] == season['id']%}{{season['season_title']}}{%endif%}
+        {% endfor %}
+-
+{%endif%}
+      {%for episode in curr_season['episodes']|sort(attribute="id")%}
+{%if curr_episode['youtube_url'] == episode['youtube_url']%}{{episode['title']}}{%endif%}
+      {%endfor%}
+      </h5>
+      <hr style="height:5px; color: #777"/>
+      <span class="series__published-year">
+        <span style="color: #777;">ปีที่ฉาย:</span>
+        {{series['seasons'][0]['published_year'] - 543}}
+        <span style="color: #777;">•</span>
+      </span>
+      <span class="series__season">
+        {{series['seasons']|length}} ซีซั่น
+      </span>
+      <p class="series__description">
+        {{series['description']}}
+      </p>
+  </div>
+  {%endif%}
+  <div class="col-12 col-md-5 col-lg-4">
+    <div class="series__tag-label-box">
+      <span class="series__tag-label">
+        แนวเรื่อง:
+      </span>
+      {%for genre in series['genres']%}
+      <span class="series__actor">
+        <a href="/genre/{{genre['id']}}" class="tag__link">
+          {{genre['name']}}{%if series['genres']|length !=
+          loop.index%},{%endif%}
+        </a>
+      </span>
+      {%endfor%}
+    </div>
+    <div class="series__tag-label-box addReadMoreActor showlesscontentActor">
+      <span class="series__tag-label">
+        นักแสดง:
+      </span>
+      {%for actor in series['actors']%}
+
+{%if loop.index == 7%}
+      <span class="SecSecActor">
+        {%endif%}
+      <span class="series__actor">
+        <a href="/actor/{{actor['id']}}" class="tag__link">
+          {{actor['name']}}{%if series['actors']|length !=
+          loop.index%},{%endif%}
+        </a>
+      </span>
+      {%endfor%}
+
+{%if series['actors']|length > 6%}
+      </span>
+
+      <span class="readMoreActor" title="Click to Show More">
+        ... ดูเพิ่มเติม</span
+      ><span class="readLessActor" title="Click to Show Less"> ย่อเนื้อหา</span>
+      {%endif%}
+    </div>
+
+    <div class="series__tag-label-box">
+      <span class="series__tag-label">
+        สตูดิโอ:
+      </span>
+      {%for studio in series['studio']%}
+      <span class="series__actor">
+        <a href="/studio/{{studio['id']}}" class="tag__link">
+          {{studio['name']}}{%if series['studio']|length !=
+          loop.index%},{%endif%}
+        </a>
+      </span>
+      {%endfor%}
+    </div>
+    <div class="series__tag-label-box">
+      <span class="series__tag-label">
+        สถานะ:
+      </span>
+
+      <span class="series__actor">
+        {%if series['state']%}
+        <a href="/genre/completed" class="tag__link">
+          จบแล้ว
+        </a>
+        {% else %}
+        <a href="/genre/ongoing" class="tag__link">
+          ยังไม่จบ
+        </a>
+        {%endif%}
+      </span>
+    </div>
+  </div>
+
+  <!--- Google Adsense --->
+  <div class="col-12 text-center google-ads">
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1334778057140315"
+      crossorigin="anonymous"
+    ></script>
+    <!-- soiflix content page horizontal ads -->
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="6046644423"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <!--- End Google Adsense --->
+  <div class="col-12">
+    <div class="row" id="random-tvshow-scroller">
+      <h4 class="related-movie__header">รายการทีวีอื่นๆ</h4>
+    </div>
+  </div>
+
+</div>
+
+<template id="post_template">
+  <!-- template content -->
+
+  <div class="content-box">
+    <a class="movie__link" id="content-link" href="">
+      <img class="semi-movie__poster lazyload" id="cover-img" src="" />
+      <h5 class="movie__header" id="title"></h5>
+      <p class="genre__description-list" id="genre-description"></p>
+      <p class="content__new-ep" id="last-episode-title"></p>
+    </a>
+  </div>
+</template>
+
+<!-- element to trigger the IntersectionObserver -->
+<div class="d-flex justify-content-center mb-3" id="sentinel">
+  <div class="spinner-border" role="status"></div>
+</div>
+
+
+<script>
+  // Get references to the dom elements
+  var scroller = document.querySelector("#random-tvshow-scroller");
+  var template = document.querySelector("#post_template");
+  var ads_template = document.querySelector("#ads_template");
+  var loaded = document.querySelector("#loaded");
+  var sentinel = document.querySelector("#sentinel");
+
+  // Set a counter to count the items loaded
+  var counter = 0;
+
+  // Function to request new items and render to the dom
+  function loadItems() {
+    // Use fetch to request data and pass the counter value in the QS
+    fetch(`/load-mobile-content-tvshow-page?c=${counter}`).then((response) => {
+      // Convert the response data to JSON
+      response.json().then((data) => {
+        // If empty JSON, exit the function
+        if (!data.length) {
+          // Replace the spinner with "No more posts"
+          sentinel.innerHTML = "No more posts";
+          return;
+        }
+
+        // Iterate over the items in the response
+        for (var i = 0; i < data.length; i++) {
+          // Clone the HTML template
+          let template_clone = template.content.cloneNode(true);
+
+          // Query & update the template content
+          template_clone.querySelector(
+            "#title"
+          ).innerHTML = `${data[i]["title"]}`;
+          template_clone.querySelector("#genre-description").innerHTML =
+            data[i]["genre-description"];
+          template_clone.querySelector("#cover-img").src = data[i]["thumbnail"];
+          template_clone.querySelector("#content-link").href =
+            data[i]["content-link"];
+          template_clone.querySelector("#last-episode-title").innerHTML =
+            data[i]["last-episode-title"];
+
+          // Append template to dom
+
+          let gridNode = document.createElement("div");
+          gridNode.classList.add(
+            "col-12",
+            "col-md-6",
+            "col-lg-6",
+            "col-xl-2half",
+            "col-xxl-2",
+            "movie__cover",
+            "nopadding"
+          );
+          if (data[i]["state"] == "NEW_EP") {
+            let itemNode = document.createElement("div");
+            itemNode.classList.add("item");
+            let spanNode = document.createElement("span");
+            spanNode.classList.add("notify-badge", "orange-badge");
+            let textNode = document.createTextNode("ตอนใหม่");
+            spanNode.appendChild(textNode);
+            itemNode.appendChild(spanNode);
+            itemNode.appendChild(template_clone.children[0]);
+            gridNode.appendChild(itemNode);
+            scroller.appendChild(gridNode);
+          } else if (data[i]["state"] == "NEW_CONTENT") {
+            let itemNode = document.createElement("div");
+            itemNode.classList.add("item");
+            let spanNode = document.createElement("span");
+            spanNode.classList.add("notify-badge", "red-badge");
+            let textNode = document.createTextNode("มาใหม่");
+            spanNode.appendChild(textNode);
+            itemNode.appendChild(spanNode);
+            itemNode.appendChild(template_clone.children[0]);
+            gridNode.appendChild(itemNode);
+            scroller.appendChild(gridNode);
+          } else {
+            gridNode.appendChild(template_clone.children[0]);
+            scroller.appendChild(gridNode);
+          }
+
+          // Increment the counter
+
+          // Update the counter in the navbar
+          // loaded.innerText = `${counter} items loaded`;
+
+        }
+
+        counter += 1;
+      });
+    });
+  }
+
+  // Create a new IntersectionObserver instance
+  var intersectionObserver = new IntersectionObserver((entries) => {
+    // Uncomment below to see the entry.intersectionRatio when
+    // the sentinel comes into view
+
+    // entries.forEach(entry => {
+    //   console.log(entry.intersectionRatio);
+    // })
+
+    // If intersectionRatio is 0, the sentinel is out of view
+    // and we don't need to do anything. Exit the function
+    if (entries[0].intersectionRatio <= 0) {
+      return;
+    }
+
+    // Call the loadItems function
+    loadItems();
+  });
+
+  // Instruct the IntersectionObserver to watch the sentinel
+  intersectionObserver.observe(sentinel);
+</script>
+{% endblock %}

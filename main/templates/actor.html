@@ -1,0 +1,44 @@
+{% extends "layout.html" %} {% block content %}
+<style>
+  .movie__cover {
+    object-fit: contain;
+    margin-bottom: 20px;
+    transition: transform 450ms;
+  }
+  .movie__cover:hover {
+    transform: scale(1.08);
+  }
+  .movie__header {
+    font-size: 18px;
+    color: #c6c6c6;
+  }
+  .movie__poster {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .movie__link {
+    text-decoration: none;
+  }
+  .topic__header {
+    color: white;
+    margin-bottom: 15px;
+    margin-top: 20px;
+  }
+</style>
+<div class="row">
+  <h2 class="topic__header">{{title}}</h2>
+  {% for serie in series %}
+  <div class="col-6 col-md-4 col-lg-3 movie__cover">
+    <a class="movie__link" href="/series/{{serie['id']}}">
+      <img
+        class="movie__poster"
+        src="/static/series/thumbnail/{{serie['thumbnail']}}"
+        alt="{{serie['title']}}"
+      />
+      <h5 class="movie__header">{{serie['title']}}</h5>
+    </a>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

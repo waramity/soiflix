@@ -1,0 +1,83 @@
+{% if request.MOBILE %}
+<div class="nopadding">
+  <div
+    class="list-group flex-row text-nowrap table-responsive"
+    id="list-tab"
+    role="tablist"
+    style="
+      font-size: 80%;
+      overflow-y: hidden;
+      height: 100%;
+      border-bottom: 0.5px solid #808080;
+    "
+  >
+    <button type="button" class="btn btn-dark genre-btn" id="all-content">
+      ทั้งหมด
+    </button>
+    {%if genre_name == "ดูต่อ"%}
+    <button type="button" class="btn btn-light genre-btn" id="continue-content">
+      ดูต่อ
+    </button>
+    {%else%}
+    <button type="button" class="btn btn-dark genre-btn" id="continue-content">
+      ดูต่อ
+    </button>
+    {%endif%} {%if genre_name == "ใหม่และล่าสุด"%}
+    <button type="button" class="btn btn-light genre-btn" id="new-release">
+      ใหม่และล่าสุด
+    </button>
+    {%else%}
+    <button type="button" class="btn btn-dark genre-btn" id="new-release">
+      ใหม่และล่าสุด
+    </button>
+    {%endif%} {%for genre in genre_list_group%} {%if genre["genre_name"] ==
+    genre_name%}
+    <button
+      type="button"
+      class="btn btn-light genre-btn"
+      id="{{genre['genre_name']}}"
+    >
+      {{genre["genre_name"]}}
+    </button>
+    {%else%}
+    <button
+      type="button"
+      class="btn btn-dark genre-btn"
+      id="{{genre['genre_name']}}"
+    >
+      {{genre["genre_name"]}}
+    </button>
+
+    {%endif%} {%endfor%} {% if genre_list_group_scroll_position is not none %}
+  </div>
+</div>
+<script>
+  $("#list-tab").animate(
+    { scrollLeft: "+={{genre_list_group_scroll_position}}" },
+    1
+  );
+</script>
+{% endif %}
+<script>
+  $(".genre-btn").click(function () {
+    let genre_list_group_scroll_position = $("#list-tab").scrollLeft();
+    let genre_json = {
+      genre_list_group_scroll_position: genre_list_group_scroll_position,
+    };
+    var genre_name = $(this).attr("id");
+    if (genre_name == "all-content") {
+      var url = "/";
+    } else {
+      var url =
+        "/genre/" +
+        genre_name +
+        "/" +
+        genre_list_group_scroll_position +
+        "/page/1";
+    }
+    // Simulate an HTTP redirect:
+    window.location.href = url;
+  });
+</script>
+
+{%endif%}

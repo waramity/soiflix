@@ -1,0 +1,981 @@
+{% extends "layout.html" %} {% block content %}
+
+<template id="semi_post_template">
+  <!-- template content -->
+
+  <div class="mobile__content-box">
+    <a class="movie__link" id="content-link" href="">
+      <img class="semi-movie__poster lazyload" id="cover-img" src="" />
+      <h6 class="mobile__genre-header" id="title"></h6>
+    </a>
+  </div>
+</template>
+<!-- template schema, hidden from the dom -->
+<script>
+  var semi_template = document.querySelector("#semi_post_template");
+  var trending_counter = 1;
+  var new_content_counter = 1;
+  var new_ep_counter = 1;
+  function loadClickableItems(req_url, div_id) {
+    // var scroller = document.querySelector("#scroller");
+    var scroller = document.querySelector(div_id);
+    // Get references to the dom elements
+
+    // Set a counter to count the items loaded
+
+    // Function to request new items and render to the dom
+    // Use fetch to request data and pass the counter value in the QS
+    if (div_id == "#trending-content-box")
+      req_url_full_link = `${req_url}?c=${trending_counter}`;
+    else if (div_id == "#new-content-box")
+      req_url_full_link = `${req_url}?c=${new_content_counter}`;
+    else if (div_id == "#new-ep-box")
+      req_url_full_link = `${req_url}?c=${new_ep_counter}`;
+
+    fetch(req_url_full_link).then((response) => {
+      // Convert the response data to JSON
+      response.json().then((data) => {
+        // Iterate over the items in the response
+        for (var i = 0; i < data.length; i++) {
+          // Clone the HTML template
+          let template_clone = semi_template.content.cloneNode(true);
+
+          // Query & update the template content
+          template_clone.querySelector(
+            "#title"
+          ).innerHTML = `${data[i]["title"]}`;
+          template_clone.querySelector("#cover-img").src = data[i]["thumbnail"];
+          template_clone.querySelector("#content-link").href =
+            data[i]["content-link"];
+
+          // Append template to dom
+
+          let gridNode = document.createElement("div");
+          gridNode.classList.add(
+            "col-6",
+            "col-md-6",
+            "col-lg-6",
+            "col-xl-2",
+            "movie__cover",
+            "nopadding"
+          );
+          if (data[i]["state"] == "NEW_EP") {
+            let itemNode = document.createElement("div");
+            itemNode.classList.add("item");
+            let spanNode = document.createElement("span");
+            spanNode.classList.add("notify-badge", "orange-badge");
+            let textNode = document.createTextNode("ตอนใหม่");
+            spanNode.appendChild(textNode);
+            itemNode.appendChild(spanNode);
+            itemNode.appendChild(template_clone.children[0]);
+            gridNode.appendChild(itemNode);
+            scroller.appendChild(gridNode);
+          } else if (data[i]["state"] == "NEW_CONTENT") {
+            let itemNode = document.createElement("div");
+            itemNode.classList.add("item");
+            let spanNode = document.createElement("span");
+            spanNode.classList.add("notify-badge", "red-badge");
+            let textNode = document.createTextNode("มาใหม่");
+            spanNode.appendChild(textNode);
+            itemNode.appendChild(spanNode);
+            itemNode.appendChild(template_clone.children[0]);
+            gridNode.appendChild(itemNode);
+            scroller.appendChild(gridNode);
+          } else {
+            gridNode.appendChild(template_clone.children[0]);
+            scroller.appendChild(gridNode);
+          }
+        }
+
+        if (div_id == "#trending-content-box") trending_counter += 1;
+        else if (div_id == "#new-content-box") new_content_counter += 1;
+        else if (div_id == "#new-ep-box") new_ep_counter += 1;
+      });
+    });
+  }
+</script>
+
+<template id="blog_post_template">
+  <!-- template content -->
+  <div class="card text-white bg-dark mb-3 col-12 col-md-6">
+    <a href="" style="text-decoration: none; color: white;" id="blog-url">
+      <div class="row g-0">
+        <div class="col-4">
+          <img
+            width="400"
+            height="150"
+            src=""
+            class="img-fluid rounded-start"
+            alt=""
+            style="
+              width: 400px;
+              height: 150px;
+              object-fit: cover;
+              border-radius: 2%;
+            "
+          />
+        </div>
+        <div class="col-8">
+          <div
+            class="card-body"
+            style="
+              top: 50%;
+              position: absolute;
+              -ms-transform: translateY(-50%);
+              transform: translateY(-50%);
+            "
+          >
+            <h6 class="card-title"></h6>
+            <p class="card-text">
+              <small class="text-muted"></small>
+            </p>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+</template>
+<!-- template schema, hidden from the dom -->
+<script>
+  var blog_template = document.querySelector("#blog_post_template");
+  var blog_counter = 1;
+  function loadClickableBlogItems(req_url, div_id) {
+    // var scroller = document.querySelector("#scroller");
+    var blog_scroller = document.querySelector(div_id);
+    // Get references to the dom elements
+
+    // Set a counter to count the items loaded
+
+    // Function to request new items and render to the dom
+    // Use fetch to request data and pass the counter value in the QS
+    req_url_full_link = `${req_url}?c=${blog_counter}`;
+
+    fetch(req_url_full_link).then((response) => {
+      // Convert the response data to JSON
+      response.json().then((data) => {
+        // Iterate over the items in the response
+        for (var i = 0; i < data.length; i++) {
+          // Clone the HTML template
+          let blog_template_clone = blog_template.content.cloneNode(true);
+
+          // Query & update the template content
+          blog_template_clone.querySelector(
+            ".card-title"
+          ).innerHTML = `${data[i]["title"]}`;
+          blog_template_clone.querySelector(".img-fluid").src =
+            "/static/post/thumbnail/" + data[i]["thumbnail"];
+          blog_template_clone.querySelector(".img-fluid").alt =
+            data[i]["title"];
+          blog_template_clone.querySelector(".text-muted").innerHTML =
+            data[i]["date"];
+          blog_template_clone.querySelector("#blog-url").href =
+            "/blog/" + String(data[i]["id"]);
+
+          blog_scroller.appendChild(blog_template_clone);
+        }
+
+        blog_counter += 1;
+      });
+    });
+  }
+</script>
+<div class="row">
+  <div
+    class="alert alert-primary d-flex align-items-center"
+    role="alert"
+    style="margin-top: 1em;"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="currentColor"
+      class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+      viewBox="0 0 16 16"
+      role="img"
+      aria-label="Warning:"
+    >
+      <path
+        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
+      />
+    </svg>
+    <div>
+      เว็บไซต์ของเรายังอยู่ในช่วงพัฒนา ถ้าหากเกิดปัญหาอันใด
+      ท่านสามารถแจ้งปัญหาได้ทุกเมื่อที่ต้องการ
+      <!-- Button trigger modal -->
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#supportModal"
+      >
+        คลิกเพื่อแจ้งปัญหา
+      </button>
+
+      <!-- Modal -->
+
+      <div
+        class="modal fade"
+        id="supportModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form id="feedbackForm">
+              <div class="modal-header">
+                <h5 class="modal-title">
+                  แจ้งปัญหา
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="feedbackFormControlInput" class="form-label"
+                    >หัวเรื่อง</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="feedbackFormControlInput"
+                    name="feedbackFormControlInput"
+                    required="required"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="feedbackFormControlTextarea" class="form-label"
+                    >ข้อเสนอแนะ/แจ้งปัญหา</label
+                  >
+                  <textarea
+                    class="form-control"
+                    id="feedbackFormControlTextarea"
+                    name="feedbackFormControlTextarea"
+                    rows="3"
+                    required="required"
+                  ></textarea>
+                </div>
+                <div id="response-feedback"></div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  ปิด
+                </button>
+                <button
+                  type="button"
+                  id="submitFeedback"
+                  class="btn btn-primary"
+                  onclick="this.disabled = true"
+                >
+                  ส่ง
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const submitFeedback = document.getElementById("submitFeedback");
+  submitFeedback.addEventListener("click", function (e) {
+    e.preventDefault();
+    var data = {
+      feedbackFormControlInput: document.getElementById(
+        "feedbackFormControlInput"
+      ).value,
+      feedbackFormControlTextarea: document.getElementById(
+        "feedbackFormControlTextarea"
+      ).value,
+    };
+
+    fetch("feedback", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    }).then((res) => {
+      document.getElementById("response-feedback").innerHTML =
+        "ขอขอบคุณสำหรับคำแนะนำที่เต็มไปด้วยความห่วงใย เราจะนำความคิดเห็นดังกล่าวไปปรับปรุงให้ดีที่สุด";
+
+      document.getElementById("feedbackFormControlInput").value = "";
+      document.getElementById("feedbackFormControlTextarea").value = "";
+    });
+  });
+</script>
+<!--- Google Adsense --->
+
+<div class="row">
+  <div class="col-12 text-center google-ads">
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1334778057140315"
+      crossorigin="anonymous"
+    ></script>
+    <!-- soiflix main page -->
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+</div>
+<!--- End Google Adsense --->
+<!--- Mobile section --->
+
+<div class="row" style="margin-bottom: 3em;">
+  <div class="col-7">
+    <div class="fs-2 mb-1">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="28"
+        height="28"
+        fill="currentColor"
+        class="bi bi-facebook"
+        viewBox="0 0 16 16"
+        style="color: #007bff;"
+      >
+        <path
+          d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"
+        ></path>
+      </svg>
+      <span style="color: #d3dedc;" class="fs-4">
+        Soiflix
+      </span>
+    </div>
+  </div>
+
+  <div class="col-5">
+    <button
+      type="button"
+      class="btn btn-primary"
+      style="width: 100%;"
+      id="facebook-button"
+    >
+      ติดตาม
+    </button>
+  </div>
+</div>
+
+<script>
+  $("#facebook-button").click(function () {
+    var url = "https://www.facebook.com/soiflix95";
+    window.location.href = url;
+  });
+</script>
+
+<div class="row">
+  {%if continue_content_arr != []%}
+  <div style="clear: both;">
+    <a href="/genre/continue-content">
+      <h3 class="mobile-tablet__topic-header" style="float: left;">
+        เนื้อหาดูต่อสำหรับคุณ
+      </h3>
+
+      <h4
+        class="mobile-tablet__topic-header"
+        style="float: right; font-weight: 200;"
+      >
+        ดูทั้งหมด >
+      </h4>
+    </a>
+  </div>
+
+  <div class="nopadding">
+    <div
+      class="list-group flex-row table-responsive"
+      id="list-tab"
+      role="tablist"
+      style="overflow-y: hidden; margin-bottom: 3em;"
+      onmousedown="return false"
+    >
+      {%for content in continue_content_arr%}
+      <div
+        class="col-7 col-sm-5 movie__cover nopadding"
+        style="margin-right: 5px;"
+      >
+        {{content | mobile_continue_content_thumbnail_filter | safe()}}
+      </div>
+      {%endfor%}
+    </div>
+  </div>
+  {%endif%}
+</div>
+
+<div class="row">
+  <div style="clear: both;">
+    <h3 class="mobile-tablet__topic-header" style="float: left;">
+      รับชมเนื้อหาแนวไหนดี?
+    </h3>
+  </div>
+</div>
+<div class="row">
+  <div
+    class="list-group flex-row table-responsive"
+    id="list-tab"
+    role="tablist"
+    style="
+      overflow-y: hidden;
+      margin-bottom: 3em;
+      padding-top: 1em;
+      padding-bottom: 1em;
+    "
+    onmousedown="return false"
+  >
+    <div class="col-4" style="margin-right: 1em;">
+      {%for genre_button in genre_buttons[:4]%}
+      <button
+        type="button"
+        class="btn btn-dark position-relative"
+        style="
+          width: 100%;
+          margin-bottom: 1em;
+          border-radius: 0.5em;
+          margin-left: 0.5em;
+          margin-right: 0.5em;
+        "
+        id="{{genre_button['genre_name']}}"
+      >
+        {{genre_button["genre_name"]}} {%if loop.index < 5%} {%if loop.index ==
+        1 and notifications["trending"] != 0%}
+        <span
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+        >
+          {{notifications["trending"]}}{%if notifications["trending"] >
+          99%}+{%endif%}
+        </span>
+        {%endif%} {%if loop.index == 2 and notifications["movie"] != 0%}
+        <span
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+        >
+          {{notifications["movie"]}}{%if notifications["movie"] > 99%}+{%endif%}
+        </span>
+        {%endif%} {%if loop.index == 3 and notifications["series"] != 0%}
+
+        <span
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+        >
+          {{notifications["series"]}}{%if notifications["series"] >
+          99%}+{%endif%}
+        </span>
+        {%endif%} {%if loop.index == 4 and notifications["tvshow"] != 0%}
+
+        <span
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+        >
+          {{notifications["tvshow"]}}{%if notifications["tvshow"] >
+          99%}+{%endif%}
+        </span>
+        {%endif%} {%endif%}
+      </button>
+
+      <script>
+        $("#{{genre_button['genre_name']}}").click(function () {
+          var url = "{{genre_button['url']}}";
+          window.location.href = url;
+        });
+      </script>
+      {%endfor%}
+    </div>
+
+    <div class="col-4" style="margin-right: 1em;">
+      {%for genre_button in genre_buttons[4:8]%}
+      <button
+        type="button"
+        class="btn btn-dark"
+        style="
+          width: 100%;
+          margin-bottom: 1em;
+          border-radius: 0.5em;
+          margin-left: 0.5em;
+          margin-right: 0.5em;
+        "
+        id="{{genre_button['genre_name']}}"
+      >
+        {{genre_button["genre_name"]}}
+      </button>
+      <script>
+        $("#{{genre_button['genre_name']}}").click(function () {
+          var url = "{{genre_button['url']}}";
+          window.location.href = url;
+        });
+      </script>
+      {%endfor%}
+    </div>
+
+    <div class="col-4" style="margin-right: 1em;">
+      {%for genre_button in genre_buttons[8:12]%}
+      <button
+        type="button"
+        class="btn btn-dark"
+        style="
+          width: 100%;
+          margin-bottom: 1em;
+          border-radius: 0.5em;
+          margin-left: 0.5em;
+          margin-right: 0.5em;
+        "
+        id="{{genre_button['genre_name']}}"
+      >
+        {{genre_button["genre_name"]}}
+      </button>
+      <script>
+        $("#{{genre_button['genre_name']}}").click(function () {
+          var url = "{{genre_button['url']}}";
+          window.location.href = url;
+        });
+      </script>
+      {%endfor%}
+    </div>
+
+    <div class="col-4" style="margin-right: 1em;">
+      {%for genre_button in genre_buttons[12:16]%}
+      <button
+        type="button"
+        class="btn btn-dark"
+        style="
+          width: 100%;
+          margin-bottom: 1em;
+          border-radius: 0.5em;
+          margin-left: 0.5em;
+          margin-right: 0.5em;
+        "
+        id="{{genre_button['genre_name']}}"
+      >
+        {{genre_button["genre_name"]}}
+      </button>
+      <script>
+        $("#{{genre_button['genre_name']}}").click(function () {
+          var url = "{{genre_button['url']}}";
+          window.location.href = url;
+        });
+      </script>
+      {%endfor%}
+    </div>
+
+    <div class="col-4" style="margin-right: 1em;">
+      {%for genre_button in genre_buttons[16:20]%}
+      <button
+        type="button"
+        class="btn btn-dark"
+        style="
+          width: 100%;
+          margin-bottom: 1em;
+          border-radius: 0.5em;
+          margin-left: 0.5em;
+          margin-right: 0.5em;
+        "
+        id="{{genre_button['genre_name']}}"
+      >
+        {{genre_button["genre_name"]}}
+      </button>
+      <script>
+        $("#{{genre_button['genre_name']}}").click(function () {
+          var url = "{{genre_button['url']}}";
+          window.location.href = url;
+        });
+      </script>
+      {%endfor%}
+    </div>
+    <div class="col-4">
+      {%for genre_button in genre_buttons[20:]%}
+      <button
+        type="button"
+        class="btn btn-dark"
+        style="
+          width: 100%;
+          margin-bottom: 1em;
+          border-radius: 0.5em;
+          margin-left: 0.5em;
+          margin-right: 0.5em;
+        "
+        id="{{genre_button['genre_name']}}"
+      >
+        {{genre_button["genre_name"]}}
+      </button>
+      <script>
+        $("#{{genre_button['genre_name']}}").click(function () {
+          var url = "{{genre_button['url']}}";
+          window.location.href = url;
+        });
+      </script>
+      {%endfor%}
+    </div>
+  </div>
+
+  <hr
+    style="
+      height: 0.5em;
+      border-width: 0;
+      color: gray;
+      background-color: gray;
+      margin-bottom: 3em;
+    "
+  />
+</div>
+
+<div class="row" id="trending-content-box">
+  <a href="/genre/80">
+    <h3 class="mobile-tablet__topic-header" style="float: left;">
+      ยอดนิยม แนะนำให้ดู🔥
+    </h3>
+
+    <h4
+      class="mobile-tablet__topic-header"
+      style="float: right; font-weight: 200;"
+    >
+      ดูทั้งหมด >
+    </h4>
+  </a>
+
+  {% for vdo in trending_content %}
+  <div
+    id="mobile-tablet-content-{{loop.index}}"
+    class="col-6 col-md-6 col-lg-6 col-xl-2 movie__cover nopadding"
+  >
+    {{vdo | mobile_main_genre_filter | safe()}}
+  </div>
+  {% endfor %}
+</div>
+
+<div class="row">
+  <div class="col-12 mt-4">
+    <button
+      type="button"
+      class="btn btn-dark"
+      id="trending-button"
+      style="padding: 0.7em; width: 100%;"
+    >
+      ดูเพิ่มเติม
+    </button>
+    <script>
+      $("#trending-button").click(function () {
+        loadClickableItems(
+          "/load-mobile-trending-content-main-page",
+          "#trending-content-box"
+        );
+      });
+    </script>
+  </div>
+
+  <hr
+    style="
+      height: 0.5em;
+      border-width: 0;
+      color: gray;
+      background-color: gray;
+      margin-top: 3em;
+      margin-bottom: 3em;
+    "
+  />
+</div>
+<!------------------------------------------------------->
+
+<!---End Mobile section --->
+
+<div class="row" id="new-content-box">
+  <a href="/genre/new-content-release">
+    <h3 class="mobile-tablet__topic-header" style="float: left;">
+      เนื้อหาใหม่
+    </h3>
+
+    <h4
+      class="mobile-tablet__topic-header"
+      style="float: right; font-weight: 200;"
+    >
+      ดูทั้งหมด >
+    </h4>
+  </a>
+
+  {% for vdo in new_content %}
+  <div
+    id="mobile-tablet-content-{{loop.index}}"
+    class="col-6 col-md-6 col-lg-6 col-xl-2 movie__cover nopadding"
+  >
+    {{vdo | mobile_main_genre_filter | safe()}}
+  </div>
+  {% endfor %}
+</div>
+
+<div class="row">
+  <div class="col-12 mt-4">
+    <button
+      type="button"
+      class="btn btn-dark"
+      id="new-content-button"
+      style="padding: 0.7em; width: 100%;"
+    >
+      ดูเพิ่มเติม
+    </button>
+    <script>
+      $("#new-content-button").click(function () {
+        loadClickableItems(
+          "/load-mobile-new-content-main-page",
+          "#new-content-box"
+        );
+      });
+    </script>
+  </div>
+
+  <hr
+    style="
+      height: 0.5em;
+      border-width: 0;
+      color: gray;
+      background-color: gray;
+      margin-top: 3em;
+      margin-bottom: 3em;
+    "
+  />
+</div>
+
+<div class="row" id="new-ep-box">
+  <a href="/genre/new-ep-release">
+    <h3 class="mobile-tablet__topic-header" style="float: left;">
+      ตอนล่าสุด
+    </h3>
+
+    <h4
+      class="mobile-tablet__topic-header"
+      style="float: right; font-weight: 200;"
+    >
+      ดูทั้งหมด >
+    </h4>
+  </a>
+
+  {% for vdo in new_ep %}
+  <div
+    id="mobile-tablet-content-{{loop.index}}"
+    class="col-6 col-md-6 col-lg-6 col-xl-2 movie__cover nopadding"
+  >
+    {{vdo | mobile_main_genre_filter | safe()}}
+  </div>
+  {% endfor %}
+</div>
+
+<div class="row">
+  <div class="col-12 mt-4">
+    <button
+      type="button"
+      class="btn btn-dark"
+      id="new-ep-button"
+      style="padding: 0.7em; width: 100%;"
+    >
+      ดูเพิ่มเติม
+    </button>
+    <script>
+      $("#new-ep-button").click(function () {
+        loadClickableItems("/load-mobile-new-ep-main-page", "#new-ep-box");
+      });
+    </script>
+  </div>
+
+  <hr
+    style="
+      height: 0.5em;
+      border-width: 0;
+      color: gray;
+      background-color: gray;
+      margin-top: 3em;
+      margin-bottom: 3em;
+    "
+  />
+</div>
+
+<div class="row">
+  <div class="col-12 text-center google-ads">
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+</div>
+
+<div class="row" id="scroller">
+  <div style="background-color: black;">
+    <div
+      class="row"
+      style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;"
+    >
+      <div id="header-genre-div">
+        <h3 style="font-weight: bold; color: #d3dedc;" id="header-genre">
+          เนื้อหาสุ่มอื่นๆ
+        </h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+<template id="post_template">
+  <!-- template content -->
+
+  <div class="content-box">
+    <a class="movie__link" id="content-link" href="">
+      <img class="semi-movie__poster lazyload" id="cover-img" src="" />
+      <h5 class="movie__header" id="title"></h5>
+      <p class="genre__description-list" id="genre-description"></p>
+      <p class="content__new-ep" id="last-episode-title"></p>
+    </a>
+  </div>
+</template>
+<template id="ads_template">
+  <div class="col-12 text-center google-ads">
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+</template>
+
+<!--- End div class row --->
+
+<!-- element to trigger the IntersectionObserver -->
+<div class="d-flex justify-content-center mb-3" id="sentinel">
+  <div class="spinner-border" role="status"></div>
+</div>
+
+<script>
+  var scroller = document.querySelector("#scroller");
+  var template = document.querySelector("#post_template");
+  var ads_template = document.querySelector("#ads_template");
+  var loaded = document.querySelector("#loaded");
+  var sentinel = document.querySelector("#sentinel");
+  var counter = 0;
+  function loadItems() {
+    // Get references to the dom elements
+
+    // Set a counter to count the items loaded
+
+    // Function to request new items and render to the dom
+    // Use fetch to request data and pass the counter value in the QS
+    fetch(`/load-mobile-content-main-page?c=${counter}`).then((response) => {
+      // Convert the response data to JSON
+      response.json().then((data) => {
+        // If empty JSON, exit the function
+        if (!data.length) {
+          // Replace the spinner with "No more posts"
+          sentinel.innerHTML = "No more posts";
+          return;
+        }
+
+        // Iterate over the items in the response
+        for (var i = 0; i < data.length; i++) {
+          // Clone the HTML template
+          let template_clone = template.content.cloneNode(true);
+
+          // Query & update the template content
+          template_clone.querySelector(
+            "#title"
+          ).innerHTML = `${data[i]["title"]}`;
+          template_clone.querySelector("#genre-description").innerHTML =
+            data[i]["genre-description"];
+          template_clone.querySelector("#cover-img").src = data[i]["thumbnail"];
+          template_clone.querySelector("#content-link").href =
+            data[i]["content-link"];
+          template_clone.querySelector("#last-episode-title").innerHTML =
+            data[i]["last-episode-title"];
+
+          // Append template to dom
+
+          let gridNode = document.createElement("div");
+          gridNode.classList.add(
+            "col-12",
+            "col-md-6",
+            "col-lg-6",
+            "col-xl-2",
+            "movie__cover",
+            "nopadding"
+          );
+          if (data[i]["state"] == "NEW_EP") {
+            let itemNode = document.createElement("div");
+            itemNode.classList.add("item");
+            let spanNode = document.createElement("span");
+            spanNode.classList.add("notify-badge", "orange-badge");
+            let textNode = document.createTextNode("ตอนใหม่");
+            spanNode.appendChild(textNode);
+            itemNode.appendChild(spanNode);
+            itemNode.appendChild(template_clone.children[0]);
+            gridNode.appendChild(itemNode);
+            scroller.appendChild(gridNode);
+          } else if (data[i]["state"] == "NEW_CONTENT") {
+            let itemNode = document.createElement("div");
+            itemNode.classList.add("item");
+            let spanNode = document.createElement("span");
+            spanNode.classList.add("notify-badge", "red-badge");
+            let textNode = document.createTextNode("มาใหม่");
+            spanNode.appendChild(textNode);
+            itemNode.appendChild(spanNode);
+            itemNode.appendChild(template_clone.children[0]);
+            gridNode.appendChild(itemNode);
+            scroller.appendChild(gridNode);
+          } else {
+            gridNode.appendChild(template_clone.children[0]);
+            scroller.appendChild(gridNode);
+          }
+
+          // Increment the counter
+
+          // Update the counter in the navbar
+          // loaded.innerText = `${counter} items loaded`;
+
+          console.log("i = " + i);
+          console.log("counter = " + counter);
+          if (i % 6 == 0 && counter != 0) {
+            let ads_template_clone = ads_template.content.cloneNode(true);
+            scroller.appendChild(ads_template_clone.children[0]);
+          }
+        }
+
+        counter += 1;
+      });
+    });
+  }
+
+  // Create a new IntersectionObserver instance
+  var intersectionObserver = new IntersectionObserver((entries) => {
+    // Uncomment below to see the entry.intersectionRatio when
+    // the sentinel comes into view
+
+    // entries.forEach(entry => {
+    //   console.log(entry.intersectionRatio);
+    // })
+
+    // If intersectionRatio is 0, the sentinel is out of view
+    // and we don't need to do anything. Exit the function
+    if (entries[0].intersectionRatio <= 0) {
+      return;
+    }
+
+    // Call the loadItems function
+    loadItems();
+  });
+
+  // Instruct the IntersectionObserver to watch the sentinel
+  intersectionObserver.observe(sentinel);
+</script>
+{% endblock %}

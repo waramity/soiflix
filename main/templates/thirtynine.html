@@ -1,0 +1,1424 @@
+{%if login%} {{alert_msg}}
+
+<h1>Add series</h1>
+<form
+  action="{{ url_for('main.thirtynine_add_series') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <textarea name="JAS" id="JAS" rows="45" cols="100"></textarea>
+
+  <input type="file" id="IOC" name="IOC" />
+  <input type="text" id="OEM" name="OEM" placeholder="GA" />
+  <input
+    type="text"
+    id="SYT-PL-XML"
+    name="SYT-PL-XML"
+    placeholder="Series YT XML"
+  />
+  <input type="submit" onclick="httpGet()" />
+</form>
+<input type="text" id="SYT-PL" name="SYT-PL" placeholder="Series YT playlist" />
+<button onclick="httpGet()">Get XML</button>
+<script>
+  function httpGet() {
+    var YTUrl = document.getElementById("SYT-PL");
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", YTUrl.value, false); // false for synchronous request
+    xmlHttp.send(null);
+    document.getElementById("SYT-PL-XML").value = xmlHttp.responseText;
+  }
+</script>
+<p>0 = false, 1 = true</p>
+
+<!--------------------------------------------------->
+
+<h1>Add tvshow</h1>
+<form
+  action="{{ url_for('main.thirtynine_add_tvshow') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <textarea name="JAS-ATS" id="JAS-ATS" rows="45" cols="100"></textarea>
+
+  <input type="file" id="IOC-ATS" name="IOC-ATS" />
+  <input
+    type="text"
+    id="TSYT-PL-XML"
+    name="TSYT-PL-XML"
+    placeholder="Tvshow YT XML"
+  />
+  <input type="text" id="OEM-ATS" name="OEM-ATS" placeholder="GA" />
+  <input type="submit" />
+</form>
+<input
+  type="text"
+  id="TSYT-PL"
+  name="TSYT-PL"
+  placeholder="Tvshow YT playlist"
+/>
+<button onclick="httpGetTSYT()">Get XML</button>
+<script>
+  function httpGetTSYT() {
+    var YTUrl = document.getElementById("TSYT-PL");
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", YTUrl.value, false); // false for synchronous request
+    xmlHttp.send(null);
+    document.getElementById("TSYT-PL-XML").value = xmlHttp.responseText;
+  }
+</script>
+
+<!--------------------------------------------------->
+
+<h1>Add movie</h1>
+<form
+  action="{{ url_for('main.thirtynine_add_movie') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <textarea name="JAS-AMV" id="JAS-AMV" rows="45" cols="100"></textarea>
+
+  <input type="file" id="IOC-AMV" name="IOC-AMV" />
+  <input type="text" id="OEM-AMV" name="OEM-AMV" placeholder="GA" />
+  <input type="submit" />
+</form>
+<!--------------------------------------------------->
+
+<h1>Delete series</h1>
+<form
+  action="{{ url_for('main.thirtynine_delete_series') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input type="text" id="SDELALL" name="SDELALL" placeholder="Series ID" />
+
+  <input type="text" id="OEM2" name="OEM2" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>Delete tvshow</h1>
+<form
+  action="{{ url_for('main.thirtynine_delete_tvshow') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input type="text" id="TID-DTS" name="TID-DTS" placeholder="Tvshow ID" />
+
+  <input type="text" id="OEM-DTS" name="OEM-DTS" placeholder="GA" />
+  <input type="submit" />
+</form>
+<!--------------------------------------------------->
+
+<h1>Delete movie</h1>
+<form
+  action="{{ url_for('main.thirtynine_delete_movie') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input type="text" id="CID-DMV" name="CID-DMV" placeholder="Movie ID" />
+
+  <input type="text" id="OEM-DMV" name="OEM-DMV" placeholder="GA" />
+  <input type="submit" />
+</form>
+<!--------------------------------------------------->
+
+<h1>Delete season</h1>
+<form
+  action="{{ url_for('main.thirtynine_delete_season') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input type="text" id="SSID-DSS" name="SSID-DSS" placeholder="Season ID" />
+
+  <input type="text" id="OEM-DSS" name="OEM-DSS" placeholder="GA" />
+  <input type="submit" />
+</form>
+<!--------------------------------------------------->
+
+<h1>Delete EP (Series/Tvshow)</h1>
+<form
+  action="{{ url_for('main.thirtynine_delete_ep') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-DEP" id="CTS-DEP">
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-DEP" name="CID-DEP" placeholder="Content ID" />
+  <input type="text" id="SSID-DEP" name="SSID-DEP" placeholder="Season ID" />
+  <input
+    type="text"
+    id="YTID-DEP"
+    name="YTID-DEP"
+    placeholder="Youtube URL (Only VDO ID)"
+  />
+
+  <input type="text" id="OEM-DEP" name="OEM-DEP" placeholder="GA" />
+  <input type="submit" />
+</form>
+<!--------------------------------------------------->
+
+<h1>Delete multiple EP from index (Series/Tvshow)</h1>
+<form
+  action="{{ url_for('main.thirtynine_delete_multiple_ep_from_index') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-DEPFI" id="CTS-DEPFI">
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-DEPFI" name="CID-DEPFI" placeholder="Content ID" />
+  <input
+    type="text"
+    id="SSID-DEPFI"
+    name="SSID-DEPFI"
+    placeholder="Season ID"
+  />
+  <input type="text" id="FI-DEPFI" name="FI-DEPFI" placeholder="First Index" />
+  <input type="text" id="LI-DEPFI" name="LI-DEPFI" placeholder="Last Index" />
+
+  <input type="text" id="OEM-DEPFI" name="OEM-DEPFI" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>
+  Delete EP from EP order (Series/Tvshow)
+</h1>
+<form
+  action="{{ url_for('main.thirtynine_delete_ep_order') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-DEPO" id="CTS-DEPO">
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-DEPO" name="CID-DEPO" placeholder="Content ID" />
+  <input type="text" id="SSID-DEPO" name="SSID-DEPO" placeholder="Season ID" />
+  <input type="text" id="ID-DEPO" name="ID-DEPO" placeholder="Episode Order" />
+
+  <input type="text" id="OEM-DEPO" name="OEM-DEPO" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>Add new EP (Series/Tvshow)</h1>
+<form
+  action="{{ url_for('main.thirtynine_add_ep') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-ANE" id="CTS-ANE">
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-ANE" name="CID-ANE" placeholder="Content ID" />
+  <input type="text" id="SSID-ANE" name="SSID-ANE" placeholder="Season ID" />
+  <input
+    type="text"
+    id="YT-ANE"
+    name="YT-ANE"
+    style="width: 350px;"
+    placeholder="Youtube URL (Only VDO ID)"
+  />
+  <input
+    type="text"
+    id="CTT-ANE"
+    name="CTT-ANE"
+    placeholder="Content Title"
+    style="width: 550px;"
+  />
+
+  <input type="text" id="OEM-ANE" name="OEM-ANE" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>Add new Season (Series/Tvshow)</h1>
+<form
+  action="{{ url_for('main.thirtynine_add_new_season') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-ANS" id="CTS-ANS">
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-ANS" name="CID-ANS" placeholder="Content ID" />
+  <input type="text" id="K-ANS" name="K-ANS" placeholder="Keyword" />
+
+  <input type="text" id="SSTT-ANS" name="SSTT-ANS" placeholder="Season Title" />
+  <input
+    type="text"
+    id="YT-ANS"
+    name="YT-ANS"
+    style="width: 350px;"
+    placeholder="Youtube playlist URL (Full link)"
+  />
+  <input type="text" id="PY-ANS" name="PY-ANS" placeholder="Publish year" />
+  <label for="RL-ANS">Reverse loop</label>
+  <select name="RL-ANS" id="RL-ANS" placeholder="Reverse loop">
+    <option value="false">False</option>
+    <option value="true">True</option>
+  </select>
+
+  <input
+    type="text"
+    id="SSYT-PL-XML"
+    name="SSYT-PL-XML"
+    placeholder="Season YT XML"
+  />
+  <input type="text" id="OEM-ANS" name="OEM-ANS" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<input
+  type="text"
+  id="SSYT-PL"
+  name="SSYT-PL"
+  placeholder="Season YT playlist"
+/>
+<button onclick="httpGetSS()">Get XML</button>
+<script>
+  function httpGetSS() {
+    var YTUrl = document.getElementById("SSYT-PL");
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", YTUrl.value, false); // false for synchronous request
+    xmlHttp.send(null);
+    // return xmlHttp.responseText;
+    // console.log(xmlHttp.responseText);
+    document.getElementById("SSYT-PL-XML").value = xmlHttp.responseText;
+  }
+</script>
+<!--------------------------------------------------->
+
+<h1>Change thumbnail (Series/Tvshow)</h1>
+<form
+  action="{{ url_for('main.thirtynine_change_thumbnail') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-CTN" id="CTS-CTN">
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+    <option value="movie">Movie</option>
+  </select>
+  <input type="text" id="CID-CTN" name="CID-CTN" placeholder="Content ID" />
+  <input type="file" id="IOC-CTN" name="IOC-CTN" />
+
+  <input type="text" id="OEM-CTN" name="OEM-CTN" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>Insert EP (Series/Tvshow)</h1>
+<form
+  action="{{ url_for('main.thirtynine_insert_ep') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-IEP" id="CTS-IEP">
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-IEP" name="CID-IEP" placeholder="Content ID" />
+  <input
+    type="text"
+    id="YTU-IEP"
+    name="YTU-IEP"
+    style="width: 350px;"
+    placeholder="YT URL (Only vdo id)"
+  />
+  <input
+    type="text"
+    id="EPT-IEP"
+    name="EPT-IEP"
+    style="width: 350px;"
+    placeholder="EP title"
+  />
+  <input type="text" id="SSID-IEP" name="SSID-IEP" placeholder="Season ID" />
+  <input type="text" id="EPO-IEP" name="EPO-IEP" placeholder="Episode order" />
+
+  <input type="text" id="OEM-IEP" name="OEM-IEP" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>Insert Playlist (Series/Tvshow)</h1>
+<form
+  action="{{ url_for('main.thirtynine_insert_playlist') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-IPL" id="CTS-IPL">
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-IPL" name="CID-IPL" placeholder="Content ID" />
+  <input type="text" id="SSID-IPL" name="SSID-IPL" placeholder="Season ID" />
+  <input
+    type="text"
+    id="YTPU-IPL"
+    name="YTPU-IPL"
+    style="width: 350px;"
+    placeholder="YT Playlist URL (Full link)"
+  />
+
+  <input type="text" id="KW-IPL" name="KW-IPL" placeholder="Keyword" />
+  <input type="text" id="PO-IPL" name="PO-IPL" placeholder="Playlist order" />
+
+  <input
+    type="text"
+    id="YTPL-IPL-XML"
+    name="YTPL-IPL-XML"
+    placeholder="Season YT XML"
+  />
+
+  <input type="text" id="OEM-IPL" name="OEM-IPL" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<input
+  type="text"
+  id="YTPL-IPL"
+  name="YTPL-IPL"
+  placeholder="Season YT playlist"
+/>
+<button onclick="httpGetIPL()">Get XML</button>
+<script>
+  function httpGetIPL() {
+    var YTUrl = document.getElementById("YTPL-IPL");
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", YTUrl.value, false); // false for synchronous request
+    xmlHttp.send(null);
+    // return xmlHttp.responseText;
+    // console.log(xmlHttp.responseText);
+    document.getElementById("YTPL-IPL-XML").value = xmlHttp.responseText;
+  }
+</script>
+
+<!--------------------------------------------------->
+
+<h1>
+  Insert Season
+</h1>
+
+
+
+<select name="CTS-IS" id="CTS-IS">
+  <option value="series">Series</option>
+  <option value="tvshow">Tvshow</option>
+</select>
+<input type="text" id="CID-IS" name="CID-IS" placeholder="Content ID" />
+<input type="text" id="OEM-IS" name="OEM-IS" placeholder="GA" />
+<button type="button" id="get-season-button" onclick="getSeasonList()">
+  Get Season List
+</button>
+<br />
+<br />
+<form
+  action="{{ url_for('main.thirtynine_insert_season') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+
+<select name="CTS-IS2" id="CTS-IS2">
+</select>
+<input type="text" id="CID-IS2" name="CID-IS2" placeholder="Content ID" />
+  <select name="SS-IS" id="SS-IS"> </select>
+
+  <input type="text" id="K-IS" name="K-IS" placeholder="Keyword" />
+
+  <input type="text" id="SSTT-IS" name="SSTT-IS" placeholder="Season Title" />
+  <input
+    type="text"
+    id="YT-IS"
+    name="YT-IS"
+    style="width: 350px;"
+    placeholder="Youtube playlist URL (Full link)"
+  />
+  <input type="text" id="PY-IS" name="PY-IS" placeholder="Publish year" />
+  <label for="RL-IS">Reverse loop</label>
+  <select name="RL-IS" id="RL-IS" placeholder="Reverse loop">
+    <option value="false">False</option>
+    <option value="true">True</option>
+  </select>
+
+  <input
+    type="text"
+    id="SSYT-IS-XML"
+    name="SSYT-IS-XML"
+    placeholder="Season YT XML"
+  />
+  <input type="text" id="OEM-IS2" name="OEM-IS2" placeholder="GA" />
+  <input type="submit" />
+
+</form>
+
+  <input
+    type="text"
+    id="SSYT-IS"
+    name="SSYT-IS"
+    placeholder="Season YT playlist"
+  />
+  <button onclick="httpGetIS()">Get XML</button>
+  <script>
+    function httpGetIS() {
+      var YTUrl = document.getElementById("SSYT-IS");
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.open("GET", YTUrl.value, false); // false for synchronous request
+      xmlHttp.send(null);
+      // return xmlHttp.responseText;
+      // console.log(xmlHttp.responseText);
+      document.getElementById("SSYT-IS-XML").value = xmlHttp.responseText;
+    }
+  </script>
+
+  <script>
+    function getSeasonList() {
+      var CID_IS = document.querySelector("#CID-IS");
+      var OEM_IS = document.querySelector("#OEM-IS");
+      var CTS_IS = document.querySelector("#CTS-IS");
+      request_url =
+        "/thirtynine-get-season-list?SID=" +
+        String(CID_IS.value) +
+        "&OEM=" +
+        String(OEM_IS.value) +
+        "&CTS=" +
+        String(CTS_IS.value);
+
+          var CTS_IS2 = document.querySelector("#CTS-IS2");
+            let optionCTSNode = document.createElement("option");
+            optionCTSNode.value = CTS_IS.value;
+            optionCTSNode.innerHTML = CTS_IS.value;
+            CTS_IS2.appendChild(optionCTSNode);
+
+          var CID_IS2 = document.querySelector("#CID-IS2");
+            CID_IS2.value = CID_IS.value
+
+      fetch(request_url).then((response) => {
+        response.json().then((data) => {
+          var SS_IS = document.querySelector("#SS-IS");
+
+          for (i = 0; i < data.length; i++) {
+            let optionNode = document.createElement("option");
+            optionNode.value = data[i]["id"];
+            optionNode.innerHTML = data[i]["name"];
+            SS_IS.appendChild(optionNode);
+          }
+
+          // document.querySelector("#BID-TUP").value = data["id"];
+          // document.querySelector("#TT-TUP").value = data["title"];
+          // updateQuill.root.innerHTML = data["content"];
+          // document.querySelector("#G-TUP").value = data["genre"];
+          // document.querySelector("#AT-TUP").value = data["actor"];
+        });
+      });
+    }
+  </script>
+
+<!--------------------------------------------------->
+
+<h1>Move single ep order (Series/Tvshow)</h1>
+<form
+  action="{{ url_for('main.move_single_ep_order') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-MSEP" id="CTS-MSEP">
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-MSEP" name="CID-MSEP" placeholder="Content ID" />
+  <input type="text" id="SSID-MSEP" name="SSID-MSEP" placeholder="Season ID" />
+  <input
+    type="text"
+    id="YTU-MSEP"
+    name="YTU-MSEP"
+    style="width: 350px;"
+    placeholder="YT URL (Only vdo id)"
+  />
+  <input
+    type="text"
+    id="NPO-MSEP"
+    name="NPO-MSEP"
+    placeholder="New episode order"
+  />
+
+  <input type="text" id="OEM-MSEP" name="OEM-MSEP" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>Move multiple ep order (Series/Tvshow)</h1>
+<form
+  action="{{ url_for('main.move_multiple_ep_order') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-MMEP" id="CTS-MMEP">
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-MMEP" name="CID-MMEP" placeholder="Content ID" />
+  <input type="text" id="SSID-MMEP" name="SSID-MMEP" placeholder="Season ID" />
+  <input
+    type="text"
+    id="FO-MMEP"
+    name="FO-MMEP"
+    placeholder="First order content"
+  />
+  <input
+    type="text"
+    id="LO-MMEP"
+    name="LO-MMEP"
+    placeholder="Last order content"
+  />
+  <input
+    type="text"
+    id="NPO-MMEP"
+    name="NPO-MMEP"
+    placeholder="New episode order"
+  />
+
+  <input type="text" id="OEM-MMEP" name="OEM-MMEP" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>Add youtube playlist to soiflix playlist (Series/Tvshow)</h1>
+<form
+  action="{{ url_for('main.thirtynine_add_yt_playlist') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-AYP" id="CTS-AYP">
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-AYP" name="CID-AYP" placeholder="Content ID" />
+  <input
+    type="text"
+    id="YTU-AYP"
+    name="YTU-AYP"
+    style="width: 350px;"
+    placeholder="YT Playlist URL (Full link)"
+  />
+  <input
+    type="text"
+    id="KW-AYP"
+    name="KW-AYP"
+    style="width: 350px;"
+    placeholder="Keyword"
+  />
+  <input type="text" id="SSID-AYP" name="SSID-AYP" placeholder="Season ID" />
+  <label for="RL-ANS">Reverse loop</label>
+
+  <select name="RL-AYP" id="RL-AYP" placeholder="Reverse loop">
+    <option value="false">False</option>
+    <option value="true">True</option>
+  </select>
+
+  <input
+    type="text"
+    id="YTSF-PL-XML"
+    name="YTSF-PL-XML"
+    placeholder="YT SF XML"
+  />
+  <input type="text" id="OEM-AYP" name="OEM-AYP" placeholder="GA" />
+  <input type="submit" />
+</form>
+<input type="text" id="YTSF-PL" name="YTSF-PL" placeholder="YT playlist" />
+<button onclick="httpGetYTSF()">Get XML</button>
+<script>
+  function httpGetYTSF() {
+    var YTUrl = document.getElementById("YTSF-PL");
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", YTUrl.value, false); // false for synchronous request
+    xmlHttp.send(null);
+    // return xmlHttp.responseText;
+    // console.log(xmlHttp.responseText);
+    document.getElementById("YTSF-PL-XML").value = xmlHttp.responseText;
+  }
+</script>
+
+<!--------------------------------------------------->
+
+<h1>Change state (Series/Tvshow)</h1>
+<form
+  action="{{ url_for('main.thirtynine_change_state') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-CST" id="CTS-CST">
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-CST" name="CID-CST" placeholder="Content ID" />
+
+  <label for="ST-CST">State</label>
+  <select name="ST-CST" id="ST-CST" placeholder="Change state">
+    <option value="false">ยังไม่จบ</option>
+    <option value="true">จบแล้ว</option>
+  </select>
+
+  <input type="text" id="OEM-CST" name="OEM-CST" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>Change published year</h1>
+<form
+  action="{{ url_for('main.thirtynine_change_published_year') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-CPY" id="CTS-CPY">
+    <option value="movie">Movie</option>
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-CPY" name="CID-CPY" placeholder="Content ID" />
+  <input
+    type="text"
+    id="NPY-CPY"
+    name="NPY-CPY"
+    placeholder="New published year"
+  />
+
+  <input type="text" id="OEM-CPY" name="OEM-CPY" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>Change description</h1>
+<form
+  action="{{ url_for('main.thirtynine_change_description') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-CDS" id="CTS-CDS">
+    <option value="movie">Movie</option>
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-CDS" name="CID-CDS" placeholder="Content ID" />
+  <input
+    type="text"
+    id="NDS-CDS"
+    name="NDS-CDS"
+    placeholder="New description"
+  />
+
+  <input type="text" id="OEM-CDS" name="OEM-CDS" placeholder="GA" />
+  <input type="submit" />
+</form>
+<!--------------------------------------------------->
+
+<h1>Change season name</h1>
+<form
+  action="{{ url_for('main.thirtynine_change_season_name') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input type="text" id="SSID-CSSN" name="SSID-CSSN" placeholder="Season ID" />
+  <input
+    type="text"
+    id="NSSN-CSSN"
+    name="NSSN-CSSN"
+    placeholder="New season name"
+  />
+
+  <input type="text" id="OEM-CSSN" name="OEM-CSSN" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>Change genre name</h1>
+<form
+  action="{{ url_for('main.thirtynine_change_genre_name') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input type="text" id="GN-CGN" name="GN-CGN" placeholder="Old Genre Name" />
+  <input type="text" id="NGN-CGN" name="NGN-CGN" placeholder="New genre name" />
+
+  <input type="text" id="OEM-CGN" name="OEM-CGN" placeholder="GA" />
+  <input type="submit" />
+</form>
+<!--------------------------------------------------->
+
+<h1>Change content name</h1>
+<form
+  action="{{ url_for('main.thirtynine_change_content_name') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-CCN" id="CTS-CCN">
+    <option value="movie">Movie</option>
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-CCN" name="CID-CCN" placeholder="Content ID" />
+  <input
+    type="text"
+    id="NCN-CCN"
+    name="NCN-CCN"
+    placeholder="New content name"
+  />
+
+  <input type="text" id="OEM-CCN" name="OEM-CCN" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>Change episode name</h1>
+<form
+  action="{{ url_for('main.thirtynine_change_ep_name') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input type="text" id="SSID-CEPN" name="SSID-CEPN" placeholder="Season ID" />
+  <input
+    type="text"
+    id="EURL-CEPN"
+    name="EURL-CEPN"
+    placeholder="Episode Youtube URL"
+  />
+  <input type="text" id="EPN-CEPN" name="EPN-CEPN" placeholder="New ep name" />
+
+  <input type="text" id="OEM-CEPN" name="OEM-CEPN" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>Change movie youtube url</h1>
+<form
+  action="{{ url_for('main.thirtynine_change_movie_yt_url') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input type="text" id="CID-CMYT" name="CID-CMYT" placeholder="Content ID" />
+  <input
+    type="text"
+    id="YTURL-CMYT"
+    name="YTURL-CMYT"
+    placeholder="Movie Youtube URL"
+  />
+
+  <input type="text" id="OEM-CMYT" name="OEM-CMYT" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>
+  Add actor
+</h1>
+<form
+  action="{{ url_for('main.thirtynine_add_actor') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-AAT" id="CTS-AAT">
+    <option value="movie">Movie</option>
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-AAT" name="CID-AAT" placeholder="Content ID" />
+  <input type="text" id="NAT-AAT" name="NAT-AAT" placeholder="Name actor" />
+  <input type="text" id="OEM-AAT" name="OEM-AAT" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>
+  Add director
+</h1>
+<form
+  action="{{ url_for('main.thirtynine_add_director') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-ADRT" id="CTS-ADRT">
+    <option value="movie">Movie</option>
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-ADRT" name="CID-ADRT" placeholder="Content ID" />
+  <input
+    type="text"
+    id="NDRT-ADRT"
+    name="NDRT-ADRT"
+    placeholder="Name director"
+  />
+  <input type="text" id="OEM-ADRT" name="OEM-ADRT" placeholder="GA" />
+  <input type="submit" />
+</form>
+<!--------------------------------------------------->
+
+<h1>
+  Add Genre
+</h1>
+<form
+  action="{{ url_for('main.thirtynine_add_genre') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-AG" id="CTS-AG">
+    <option value="movie">Movie</option>
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-AG" name="CID-AG" placeholder="Content ID" />
+  <input type="text" id="NG-AG" name="NG-AG" placeholder="Name genre" />
+  <input type="text" id="OEM-AG" name="OEM-AG" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>
+  Add Genre in every wrong genre content (เมื่อใส่ genre สะกดผิดหลาย content
+  ให้ใช้ function นี้เพื่อใส่ genre ที่ถูกต้องในทุกๆ content ที่ใส่ genre ผิด)
+</h1>
+<form
+  action="{{ url_for('main.thirtynine_add_genre_EWGC') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input
+    type="text"
+    id="WG-AG-EWGC"
+    name="WG-AG-EWGC"
+    placeholder="Wrong genre name"
+  />
+  <input
+    type="text"
+    id="NG-AG-EWGC"
+    name="NG-AG-EWGC"
+    placeholder="Replaced name genre"
+  />
+  <input type="text" id="OEM-AG-EWGC" name="OEM-AG-EWGC" placeholder="GA" />
+  <input type="submit" />
+</form>
+<!--------------------------------------------------->
+
+<h1>
+  Add Studio
+</h1>
+<form
+  action="{{ url_for('main.thirtynine_add_studio') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-AS" id="CTS-AS">
+    <option value="movie">Movie</option>
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-AS" name="CID-AS" placeholder="Content ID" />
+  <input type="text" id="NS-AS" name="NS-AS" placeholder="Name studio" />
+  <input type="text" id="OEM-AS" name="OEM-AS" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>
+  Remove Genre
+</h1>
+<form
+  action="{{ url_for('main.thirtynine_remove_genre') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-RG" id="CTS-RG">
+    <option value="movie">Movie</option>
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-RG" name="CID-RG" placeholder="Content ID" />
+  <input type="text" id="NG-RG" name="NG-RG" placeholder="Name genre" />
+  <input type="text" id="OEM-RG" name="OEM-RG" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>
+  Remove studio
+</h1>
+<form
+  action="{{ url_for('main.thirtynine_remove_studio') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-RSTD" id="CTS-RSTD">
+    <option value="movie">Movie</option>
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-RSTD" name="CID-RSTD" placeholder="Content ID" />
+  <input type="text" id="NG-RSTD" name="NG-RSTD" placeholder="Name studio" />
+  <input type="text" id="OEM-RSTD" name="OEM-RSTD" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>
+  Remove update
+</h1>
+<form
+  action="{{ url_for('main.thirtynine_remove_update') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-RUD" id="CTS-RUD">
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-RUD" name="CID-RUD" placeholder="Content ID" />
+  <input type="text" id="OEM-RUD" name="OEM-RUD" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>
+  Add update
+</h1>
+<form
+  action="{{ url_for('main.thirtynine_add_update') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <select name="CTS-AUD" id="CTS-AUD">
+    <option value="series">Series</option>
+    <option value="tvshow">Tvshow</option>
+  </select>
+  <input type="text" id="CID-AUD" name="CID-AUD" placeholder="Content ID" />
+  <input type="text" id="OEM-AUD" name="OEM-AUD" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>
+  Delete actor (ใช้เฉพาะชื่อที่สะกดผิดเท่านั้น)
+</h1>
+<form
+  action="{{ url_for('main.thirtynine_delete_actor') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input type="text" id="NAT-DAT" name="NAT-DAT" placeholder="Name actor" />
+  <input type="text" id="OEM-DAT" name="OEM-DAT" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>
+  Delete director (ใช้เฉพาะชื่อที่สะกดผิดเท่านั้น)
+</h1>
+<form
+  action="{{ url_for('main.thirtynine_delete_director') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input
+    type="text"
+    id="NAT-DDRT"
+    name="NAT-DDRT"
+    placeholder="Name director"
+  />
+  <input type="text" id="OEM-DDRT" name="OEM-DDRT" placeholder="GA" />
+  <input type="submit" />
+</form>
+<!--------------------------------------------------->
+
+<h1>
+  Delete genre (ใช้เฉพาะชื่อที่สะกดผิดเท่านั้น)
+</h1>
+<form
+  action="{{ url_for('main.thirtynine_delete_genre') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input type="text" id="NAT-DG" name="NAT-DG" placeholder="Name genre" />
+  <input type="text" id="OEM-DG" name="OEM-DG" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>
+  Delete studio (ใช้เฉพาะชื่อที่สะกดผิดเท่านั้น)
+</h1>
+<form
+  action="{{ url_for('main.thirtynine_delete_studio') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input
+    type="text"
+    id="NSTD-DSTD"
+    name="NSTD-DSTD"
+    placeholder="Name studio"
+  />
+  <input type="text" id="OEM-DSTD" name="OEM-DSTD" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>Upload blog image</h1>
+<form
+  action="{{ url_for('main.thirtynine_upload_blog_image') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input type="file" id="IOC-UPB" name="IOC-UPB" />
+
+  <input type="text" id="OEM-UPB" name="OEM-UPB" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+<!--------------------------------------------------->
+
+<h1>
+  Create blog
+</h1>
+<!-- Include stylesheet -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
+<style>
+  .ql-editor .ql-video {
+    width: 854px;
+    height: 480px;
+  }
+</style>
+
+<form
+  action="{{ url_for('main.thirtynine_create_post') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <h3>
+    Title
+  </h3>
+
+  <input
+    type="text"
+    id="TT-TCP"
+    name="TT-TCP"
+    placeholder="Title"
+    style="width: 70%;"
+  />
+  <h3>
+    Content
+  </h3>
+  <!-- Create the editor container -->
+  <div style="width: 80%;">
+    <div id="editor"></div>
+  </div>
+
+  <input type="file" id="IOC-TCP" name="IOC-TCP" />
+
+  <input
+    type="text"
+    id="G-TCP"
+    name="G-TCP"
+    placeholder="Genre"
+    style="width: 30%;"
+  />
+
+  <input
+    type="text"
+    id="AT-TCP"
+    name="AT-TCP"
+    placeholder="Actors"
+    style="width: 30%;"
+  />
+
+  <input type="text" id="EDT-TCP" name="EDT-TCP" placeholder="เว้นไว้" />
+
+  <input type="text" id="OEM-TCP" name="OEM-TCP" placeholder="GA" />
+
+  <input onclick="getEditorContent()" type="submit" />
+</form>
+
+<!-- Include the Quill library -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+<!-- Initialize Quill editor -->
+<script>
+  var toolbarOptions = [
+    ["bold", "italic", "underline", "strike"], // toggled buttons
+    ["blockquote", "code-block"],
+
+    [{ header: 1 }, { header: 2 }], // custom button values
+    [{ list: "ordered" }, { list: "bullet" }],
+    [{ script: "sub" }, { script: "super" }], // superscript/subscript
+    [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+    [{ direction: "rtl" }], // text direction
+
+    [{ size: ["small", false, "large", "huge"] }], // custom dropdown
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+    [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+    [{ align: [] }],
+
+    ["clean"], // remove formatting button
+    ["link", "image", "video"],
+  ];
+  var quill = new Quill("#editor", {
+    modules: {
+      toolbar: toolbarOptions,
+    },
+    theme: "snow",
+  });
+
+  // customize image uploading
+  // 1. upload local image
+  function selectLocalImage() {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.click();
+
+    // listen upload local image and save to server
+    input.onchange = () => {
+      const file = input.files[0];
+
+      // file type is only image.
+      if (/^image\//.test(file.type)) {
+        saveToServer(file);
+      } else {
+        console.warn("You can only upload images.");
+      }
+    };
+  }
+
+  // 2. save to server
+  function saveToServer(file) {
+    const fd = new FormData();
+    fd.append("image", file);
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/thirtynine-upload-blog-image", true);
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        // const url = JSON.parse(xhr.responseText).data;
+        const url = xhr.responseText;
+        insertToEditor(url);
+      }
+    };
+    xhr.send(fd);
+  }
+
+  // 3. insert url to quill
+  function insertToEditor(url) {
+    // push image url to rich quill.
+    const range = quill.getSelection();
+    quill.insertEmbed(range.index, "image", `${url}`);
+  }
+
+  // quill editor add image handler
+  quill.getModule("toolbar").addHandler("image", () => {
+    selectLocalImage();
+  });
+</script>
+
+<script>
+  function getEditorContent() {
+    document.getElementById("EDT-TCP").value = quill.root.innerHTML;
+  }
+</script>
+
+<script></script>
+
+<!--------------------------------------------------->
+<h1>
+  Delete blog
+</h1>
+<form
+  action="{{ url_for('main.thirtynine_delete_post') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input type="text" id="BID-DB" name="BID-DB" placeholder="Blog ID" />
+  <input type="text" id="OEM-DB" name="OEM-DB" placeholder="GA" />
+  <input type="submit" />
+</form>
+
+  <!--------------------------------------------------->
+  <h1>
+    Update blog
+  </h1>
+
+  <input type="text" id="BID-UP" name="BID-UP" placeholder="Blog ID" />
+  <input type="text" id="OEM-UP" name="OEM-UP" placeholder="GA" />
+  <button type="button" id="get-content-button" onclick="getBlogContent()">
+    Get Blog Content
+  </button>
+
+  <form
+    action="{{ url_for('main.thirtynine_update_post') }}"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <h3>
+      Blog id
+    </h3>
+    <input type="text" id="BID-TUP" name="BID-TUP" placeholder="Blog ID" />
+    <h3>
+      Title
+    </h3>
+
+    <input
+      type="text"
+      id="TT-TUP"
+      name="TT-TUP"
+      placeholder="Title"
+      style="width: 70%;"
+    />
+    <h3>
+      Content
+    </h3>
+    <!-- Create the editor container -->
+    <div style="width: 80%;">
+      <div id="update-editor"></div>
+    </div>
+
+    <input
+      type="text"
+      id="G-TUP"
+      name="G-TUP"
+      placeholder="Genre"
+      style="width: 30%;"
+    />
+
+    <input
+      type="text"
+      id="AT-TUP"
+      name="AT-TUP"
+      placeholder="Actors"
+      style="width: 30%;"
+    />
+
+    <input type="text" id="EDT-TUP" name="EDT-TUP" placeholder="เว้นไว้" />
+
+    <input type="text" id="OEM-TUP" name="OEM-TUP" placeholder="GA" />
+
+    <input onclick="getEditorUpdatedContent()" type="submit" />
+  </form>
+
+  <script>
+    var updateQuill = new Quill("#update-editor", {
+      modules: {
+        toolbar: toolbarOptions,
+      },
+      theme: "snow",
+    });
+
+    // 3. insert url to quill
+    function insertToEditor(url) {
+      // push image url to rich quill.
+      const range = updateQuill.getSelection();
+      updateQuill.insertEmbed(range.index, "image", `${url}`);
+    }
+
+    // quill editor add image handler
+    updateQuill.getModule("toolbar").addHandler("image", () => {
+      selectLocalImage();
+    });
+  </script>
+
+  <script>
+    function getEditorUpdatedContent() {
+      document.getElementById("EDT-TUP").value = updateQuill.root.innerHTML;
+    }
+  </script>
+  <script>
+    function getBlogContent() {
+      var BID = document.querySelector("#BID-UP");
+      var OEM = document.querySelector("#OEM-UP");
+      request_url =
+        "/thirtynine-get-blog-content?BID=" +
+        String(BID.value) +
+        "&OEM=" +
+        String(OEM.value);
+      fetch(request_url).then((response) => {
+        response.json().then((data) => {
+          document.querySelector("#BID-TUP").value = data["id"];
+          document.querySelector("#TT-TUP").value = data["title"];
+          updateQuill.root.innerHTML = data["content"];
+          document.querySelector("#G-TUP").value = data["genre"];
+          document.querySelector("#AT-TUP").value = data["actor"];
+        });
+      });
+    }
+  </script>
+  <!-- Initialize Quill editor -->
+
+  <h1>Change thumbnail (Blog)</h1>
+  <form
+    action="{{ url_for('main.thirtynine_change_thumbnail_post') }}"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <input type="text" id="BID-CTP" name="BID-CTP" placeholder="Blog ID" />
+    <input type="file" id="IOC-CTP" name="IOC-CTP" />
+
+    <input type="text" id="OEM-CTP" name="OEM-CTP" placeholder="GA" />
+    <input type="submit" />
+  </form>
+  <!--------------------------------------------------->
+
+  <h1>Duplicate blog (for developement)</h1>
+  <form
+    action="{{ url_for('main.thirtynine_duplicate_post') }}"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <input type="text" id="BID-TDP" name="BID-TDP" placeholder="Blog ID" />
+    <input type="text" id="A-TDP" name="A-TDP" placeholder="Amount" />
+    <input type="text" id="OEM-TDP" name="OEM-TDP" placeholder="GA" />
+    <input type="submit" />
+  </form>
+  <!--------------------------------------------------->
+  {%for genre in genres%}
+  <p>{{genre.name}}</p>
+  {%endfor%} {%else%}
+  <form
+    action="{{ url_for('main.thirtynine_login') }}"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    โปรดใส่ชื่อและรหัสผ่าน
+    <input type="text" id="AMN-LOG" name="AMN-LOG" placeholder="Username" />
+
+    <input type="text" id="OEM-LOG" name="OEM-LOG" placeholder="GA" />
+    <input type="submit" />
+  </form>
+  {%endif%}
+</form>

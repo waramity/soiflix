@@ -1,0 +1,369 @@
+<div style="clear: both;">
+  <a href="/genre/new-content-release/0">
+    <h2 class="mobile-tablet__topic-header" style="float: left;">
+      เนื้อหาใหม่
+    </h2>
+    <h3
+      class="mobile-tablet__topic-header"
+      style="float: right; font-weight: 200;"
+    >
+      ดูทั้งหมด >
+    </h3>
+  </a>
+</div>
+
+<div class="nopadding">
+  <div
+    class="list-group flex-row table-responsive"
+    id="list-tab"
+    role="tablist"
+    style="overflow-y: hidden; margin-bottom: 3em;"
+    onmousedown="return false"
+  >
+    {%for content in new_content%}
+    <div
+      class="col-10 col-sm-5 movie__cover nopadding"
+      style="margin-right: 5px;"
+    >
+      {{content | tablet_thumbnail_filter_new_release | safe()}}
+    </div>
+    {%endfor%}
+  </div>
+</div>
+
+<div style="clear: both;">
+  <a href="/genre/new-ep-release/0">
+    <h2 class="mobile-tablet__topic-header" style="float: left;">
+      ตอนล่าสุด
+    </h2>
+    <h3
+      class="mobile-tablet__topic-header"
+      style="float: right; font-weight: 200;"
+    >
+      ดูทั้งหมด >
+    </h3>
+  </a>
+</div>
+
+<div class="nopadding">
+  <div
+    class="list-group flex-row table-responsive"
+    id="list-tab"
+    role="tablist"
+    style="overflow-y: hidden; margin-bottom: 3em;"
+    onmousedown="return false"
+  >
+    {%for content in new_ep%}
+    <div
+      class="col-10 col-sm-5 movie__cover nopadding"
+      style="margin-right: 5px;"
+    >
+      {{content | tablet_thumbnail_filter_new_release | safe()}}
+    </div>
+    {%endfor%}
+  </div>
+</div>
+
+
+  <!-- template schema, hidden from the dom -->
+  <template id="post_template">
+    <!-- template content -->
+
+    <div class="content-box">
+      <a class="movie__link" id="content-link" href="">
+        <img class="semi-movie__poster lazyload" id="cover-img" src="" />
+        <h5 class="movie__header" id="title"></h5>
+        <p class="genre__description-list" id="genre-description"></p>
+        <p class="content__new-ep" id="last-episode-title"></p>
+      </a>
+    </div>
+  </template>
+
+  <template id="ads_template">
+    <div class="col-12 text-center google-ads">
+      <ins
+        class="adsbygoogle"
+        style="display: inline-block; width: 728px; height: 90px;"
+        data-ad-client="ca-pub-1334778057140315"
+        data-ad-slot="8411748038"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </template>
+
+  <!--- End div class row --->
+</div>
+
+<!-- element to trigger the IntersectionObserver -->
+<div class="d-flex justify-content-center mb-3" id="sentinel">
+  <div class="spinner-border" role="status"></div>
+</div>
+
+<script>
+  // Get references to the dom elements
+  var scroller = document.querySelector("#scroller");
+  var template = document.querySelector("#post_template");
+  var ads_template = document.querySelector("#ads_template");
+  var loaded = document.querySelector("#loaded");
+  var sentinel = document.querySelector("#sentinel");
+
+  // Set a counter to count the items loaded
+  var counter = 0;
+
+  // Function to request new items and render to the dom
+  function loadItems() {
+    // Use fetch to request data and pass the counter value in the QS
+    fetch(`/load-mobile-content-main-page?c=${counter}`).then((response) => {
+      // Convert the response data to JSON
+      response.json().then((data) => {
+        // If empty JSON, exit the function
+        if (!data.length) {
+          // Replace the spinner with "No more posts"
+          sentinel.innerHTML = "No more posts";
+          return;
+        }
+
+        // Iterate over the items in the response
+        for (var i = 0; i < data.length; i++) {
+          // Clone the HTML template
+          let template_clone = template.content.cloneNode(true);
+
+          // Query & update the template content
+          template_clone.querySelector(
+            "#title"
+          ).innerHTML = `${data[i]["title"]}`;
+          template_clone.querySelector("#genre-description").innerHTML =
+            data[i]["genre-description"];
+          template_clone.querySelector("#cover-img").src = data[i]["thumbnail"];
+          template_clone.querySelector("#content-link").href =
+            data[i]["content-link"];
+          template_clone.querySelector("#last-episode-title").innerHTML =
+            data[i]["last-episode-title"];
+
+          // Append template to dom
+
+          let gridNode = document.createElement("div");
+          gridNode.classList.add(
+            "col-12",
+            "col-md-6",
+            "col-lg-6",
+            "col-xl-2",
+            "movie__cover",
+            "nopadding"
+          );
+          if (data[i]["state"] == "NEW_EP") {
+            let itemNode = document.createElement("div");
+            itemNode.classList.add("item");
+            let spanNode = document.createElement("span");
+            spanNode.classList.add("notify-badge", "orange-badge");
+            let textNode = document.createTextNode("ตอนใหม่");
+            spanNode.appendChild(textNode);
+            itemNode.appendChild(spanNode);
+            itemNode.appendChild(template_clone.children[0]);
+            gridNode.appendChild(itemNode);
+            scroller.appendChild(gridNode);
+          } else if (data[i]["state"] == "NEW_CONTENT") {
+            let itemNode = document.createElement("div");
+            itemNode.classList.add("item");
+            let spanNode = document.createElement("span");
+            spanNode.classList.add("notify-badge", "red-badge");
+            let textNode = document.createTextNode("มาใหม่");
+            spanNode.appendChild(textNode);
+            itemNode.appendChild(spanNode);
+            itemNode.appendChild(template_clone.children[0]);
+            gridNode.appendChild(itemNode);
+            scroller.appendChild(gridNode);
+          } else {
+            gridNode.appendChild(template_clone.children[0]);
+            scroller.appendChild(gridNode);
+          }
+
+          // Increment the counter
+
+          // Update the counter in the navbar
+          // loaded.innerText = `${counter} items loaded`;
+          if (i % 6 == 0) {
+            let ads_template_clone = ads_template.content.cloneNode(true);
+            scroller.appendChild(ads_template_clone.children[0]);
+          }
+        }
+
+        counter += 1;
+      });
+    });
+  }
+
+  // Create a new IntersectionObserver instance
+  var intersectionObserver = new IntersectionObserver((entries) => {
+    // Uncomment below to see the entry.intersectionRatio when
+    // the sentinel comes into view
+
+    // entries.forEach(entry => {
+    //   console.log(entry.intersectionRatio);
+    // })
+
+    // If intersectionRatio is 0, the sentinel is out of view
+    // and we don't need to do anything. Exit the function
+    if (entries[0].intersectionRatio <= 0) {
+      return;
+    }
+
+    // Call the loadItems function
+    loadItems();
+  });
+
+  // Instruct the IntersectionObserver to watch the sentinel
+  intersectionObserver.observe(sentinel);
+</script>
+
+<!-- template schema, hidden from the dom -->
+<template id="post_template">
+  <!-- template content -->
+
+  <div class="content-box">
+    <a class="movie__link" id="content-link" href="">
+      <img class="semi-movie__poster lazyload" id="cover-img" src="" />
+      <h5 class="movie__header" id="title"></h5>
+      <p class="genre__description-list" id="genre-description"></p>
+      <p class="content__new-ep" id="last-episode-title"></p>
+    </a>
+  </div>
+</template>
+
+<template id="ads_template">
+  <div class="col-12 text-center google-ads">
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+</template>
+
+<!-- element to trigger the IntersectionObserver -->
+<div class="d-flex justify-content-center mb-3" id="sentinel">
+  <div class="spinner-border" role="status"></div>
+</div>
+
+<script>
+  // Get references to the dom elements
+  var scroller = document.querySelector("#scroller");
+  var template = document.querySelector("#post_template");
+  var ads_template = document.querySelector("#ads_template");
+  var loaded = document.querySelector("#loaded");
+  var sentinel = document.querySelector("#sentinel");
+
+  // Set a counter to count the items loaded
+  var counter = 0;
+
+  // Function to request new items and render to the dom
+  function loadItems() {
+    // Use fetch to request data and pass the counter value in the QS
+    fetch(`/load-mobile-content-movie-page?c=${counter}`).then((response) => {
+      // Convert the response data to JSON
+      response.json().then((data) => {
+        // If empty JSON, exit the function
+        if (!data.length) {
+          // Replace the spinner with "No more posts"
+          sentinel.innerHTML = "No more posts";
+          return;
+        }
+
+        // Iterate over the items in the response
+        for (var i = 0; i < data.length; i++) {
+          // Clone the HTML template
+          let template_clone = template.content.cloneNode(true);
+
+          // Query & update the template content
+          template_clone.querySelector(
+            "#title"
+          ).innerHTML = `${data[i]["title"]}`;
+          template_clone.querySelector("#genre-description").innerHTML =
+            data[i]["genre-description"];
+          template_clone.querySelector("#cover-img").src = data[i]["thumbnail"];
+          template_clone.querySelector("#content-link").href =
+            data[i]["content-link"];
+          template_clone.querySelector("#last-episode-title").innerHTML =
+            data[i]["last-episode-title"];
+
+          // Append template to dom
+
+          let gridNode = document.createElement("div");
+          gridNode.classList.add(
+            "col-12",
+            "col-md-6",
+            "col-lg-6",
+            "col-xl-2",
+            "movie__cover",
+            "nopadding"
+          );
+          if (data[i]["state"] == "NEW_EP") {
+            let itemNode = document.createElement("div");
+            itemNode.classList.add("item");
+            let spanNode = document.createElement("span");
+            spanNode.classList.add("notify-badge", "orange-badge");
+            let textNode = document.createTextNode("ตอนใหม่");
+            spanNode.appendChild(textNode);
+            itemNode.appendChild(spanNode);
+            itemNode.appendChild(template_clone.children[0]);
+            gridNode.appendChild(itemNode);
+            scroller.appendChild(gridNode);
+          } else if (data[i]["state"] == "NEW_CONTENT") {
+            let itemNode = document.createElement("div");
+            itemNode.classList.add("item");
+            let spanNode = document.createElement("span");
+            spanNode.classList.add("notify-badge", "red-badge");
+            let textNode = document.createTextNode("มาใหม่");
+            spanNode.appendChild(textNode);
+            itemNode.appendChild(spanNode);
+            itemNode.appendChild(template_clone.children[0]);
+            gridNode.appendChild(itemNode);
+            scroller.appendChild(gridNode);
+          } else {
+            gridNode.appendChild(template_clone.children[0]);
+            scroller.appendChild(gridNode);
+          }
+
+          // Increment the counter
+
+          // Update the counter in the navbar
+          // loaded.innerText = `${counter} items loaded`;
+          if (i % 6 == 0) {
+            let ads_template_clone = ads_template.content.cloneNode(true);
+            scroller.appendChild(ads_template_clone.children[0]);
+          }
+        }
+
+        counter += 1;
+      });
+    });
+  }
+
+  // Create a new IntersectionObserver instance
+  var intersectionObserver = new IntersectionObserver((entries) => {
+    // Uncomment below to see the entry.intersectionRatio when
+    // the sentinel comes into view
+
+    // entries.forEach(entry => {
+    //   console.log(entry.intersectionRatio);
+    // })
+
+    // If intersectionRatio is 0, the sentinel is out of view
+    // and we don't need to do anything. Exit the function
+    if (entries[0].intersectionRatio <= 0) {
+      return;
+    }
+
+    // Call the loadItems function
+    loadItems();
+  });
+
+  // Instruct the IntersectionObserver to watch the sentinel
+  intersectionObserver.observe(sentinel);
+</script>

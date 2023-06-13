@@ -1,0 +1,164 @@
+{% extends "layout.html" %} {% block content %}
+<style>
+  a.disabled {
+    pointer-events: none;
+    cursor: default;
+  }
+</style>
+
+<div class="row">
+  <!--- Google Adsense --->
+  <div class="col-12 text-center google-ads">
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1334778057140315"
+      crossorigin="anonymous"
+    ></script>
+    <!-- soiflix main page -->
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <!--- End Google Adsense --->
+  {% if request.MOBILE %}
+  <div
+    style="
+      background-color: black;
+      position: -webkit-sticky; /* Safari & IE */
+      position: sticky;
+      z-index: 1000;
+      top: 0;
+    "
+  >
+    <div
+      class="row"
+      style="
+        padding-top: 15px;
+        padding-bottom: 15px;
+        padding-left: 5px;
+        padding-right: 10px;
+      "
+    >
+      <div id="main-logo"></div>
+      <div id="header-genre-div">
+        <h2
+          style="font-weight: bold; color: #d3dedc; font-size: 1.8em;"
+          id="header-genre"
+        >
+          {{title}}
+        </h2>
+      </div>
+    </div>
+  </div>
+  {%else%}
+
+  <h2 class="topic-header" style="color: white;">
+    {{title}}
+  </h2>
+
+  {%endif%} {%if genre_name == "continue-content" or genre_name == "ดูต่อ"%} {%
+  for content in continue_content_arr %}
+  <div
+    class="col-12 col-md-6 col-lg-6 col-xl-2half col-xxl-2 movie__cover nopadding"
+  >
+    {{content| continue_content_thumbnail_filter | safe}}
+  </div>
+  {% endfor %} {%else%} {% for movie in movies %}
+  <div
+    class="col-12 col-md-6 col-lg-6 col-xl-2half col-xxl-2 movie__cover nopadding"
+  >
+    {{movie | genre_filter | safe}}
+  </div>
+
+  {%if loop.index % 8 == 0%}
+  <div class="col-12 text-center google-ads mobile-tablet-display">
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  {%endif%} {% endfor %} {%endif%}
+
+  <div class="row">
+    <div class="col-4">
+      <a
+        href="{{url}}{%if curr_page != 1%}{{curr_page - 1}}{%endif%}"
+        {%if curr_page == 1%}
+        class="disabled"
+        {%endif%}
+      >
+        <button
+          type="button"
+          class="btn {%if (curr_page - 1) == 0%}btn-secondary{%else%}btn-primary{%endif%} btn-lg"
+          style="width: 100%; font-size: 1em"
+        >
+        ก่อนหน้า
+        </button>
+      </a>
+    </div>
+    <div class="col-4">
+      <select
+        class="form-control"
+        aria-label="Default select example"
+        style="width: 100%;"
+        onchange="location = this.options[this.selectedIndex].value;"
+      >
+        {% for _ in range(0, num_page) %} {%if loop.index == curr_page %}
+        <option value="{{url}}{{loop.index}}" selected>
+          {{ loop.index }}</option
+        >
+        {%else%}
+        <option value="{{url}}{{loop.index}}"> {{ loop.index }}</option>
+
+        {%endif%} {% endfor %}
+      </select>
+    </div>
+    <div class="col-4">
+      <a
+        href="{{url}}{%if curr_page != num_page%}{{curr_page + 1}}{%else%}{{curr_page}}{%endif%}"
+
+        {%if curr_page == num_page%}
+        class="disabled"
+        {%endif%}
+      >
+        <button
+          type="button"
+          class="btn {%if curr_page == num_page%}btn-secondary{%else%}btn-primary{%endif%} btn-lg"
+          style="width: 100%; font-size: 1em"
+        >
+        ต่อไป
+        </button>
+      </a>
+    </div>
+  </div>
+  <!--- Google Adsense --->
+  <div class="col-12 text-center google-ads">
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1334778057140315"
+      crossorigin="anonymous"
+    ></script>
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <!--- End Google Adsense --->
+</div>
+{% endblock %}

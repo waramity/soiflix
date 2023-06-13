@@ -1,0 +1,146 @@
+<div class="mobile-display nopadding">
+  <!-- class="list-group flex-row text-nowrap table-responsive new-content-list-group" -->
+  <div id="paginated_gallery" class="gallery">
+    <div
+      class="gallery_scroller new_content_scroller"
+      onmousedown="return false"
+    >
+      {%if new_vdo != []%} {%for content in new_vdo%}
+      <div class="colored_card">
+        {{content | mobile_tablet_thumbnail_filter_new_release_V2 | safe()}}
+      </div>
+      {%endfor%} {%endif%}
+    </div>
+  </div>
+</div>
+
+<script>
+  function dragScrollSnapBrowser(className) {
+    const slider = document.querySelector(className);
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    slider.addEventListener("mousedown", (e) => {
+      isDown = true;
+      slider.classList.add("active");
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+      slider.style.scrollSnapType = "none";
+    });
+    slider.addEventListener("mouseleave", () => {
+      isDown = false;
+      slider.classList.remove("active");
+    });
+    slider.addEventListener("mouseup", () => {
+      isDown = false;
+      slider.classList.remove("active");
+      slider.style.scrollSnapType = "x mandatory";
+    });
+    slider.addEventListener("mousemove", (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 3; //scroll-fast
+      slider.scrollLeft = scrollLeft - walk;
+      // console.log(walk);
+    });
+  }
+</script>
+
+<script>
+  function dragScrollBrowser(className) {
+    const slider = document.querySelector(className);
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    slider.addEventListener("mousedown", (e) => {
+      isDown = true;
+      slider.classList.add("active");
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+    });
+    slider.addEventListener("mouseleave", () => {
+      isDown = false;
+      slider.classList.remove("active");
+    });
+    slider.addEventListener("mouseup", () => {
+      isDown = false;
+      slider.classList.remove("active");
+    });
+    slider.addEventListener("mousemove", (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 3; //scroll-fast
+      slider.scrollLeft = scrollLeft - walk;
+      // console.log(walk);
+    });
+  }
+  dragScrollBrowser(".list-group");
+</script>
+
+<div
+  id="sticky-header"
+  style="
+    background-color: black;
+    position: -webkit-sticky; /* Safari & IE */
+    position: sticky;
+    z-index: 1000;
+    top: 0;
+  "
+  onclick="topFunction()"
+>
+  <div
+    class="row"
+    style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;"
+  >
+    <div id="main-logo"></div>
+    <div id="header-genre-div">
+      <h2
+        style="font-weight: bold; color: #d3dedc; font-size: 1.8em;"
+        id="header-genre"
+      >
+        เนื้อหาทั้งหมด
+      </h2>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.onscroll = function () {
+    var bar = document.getElementById("sticky-header");
+    var headerGenre = document.getElementById("header-genre");
+    var headerGenreDiv = document.getElementById("header-genre-div");
+    if (getScrollTop() > 2000) {
+      bar.style.backgroundColor = "#212529";
+      headerGenre.style.float = "right";
+      headerGenreDiv.style.margin = "auto";
+      headerGenre.style.fontSize = "1.2em";
+      document.getElementById("main-logo").innerHTML =
+        '<img src="/static/logo.png" style="width: 80%;" />';
+      document.getElementById("main-logo").classList.add("col-5");
+      headerGenreDiv.classList.add("col-7");
+      // headerGenreDiv.classList.add("text-center");
+    } else {
+      bar.style.backgroundColor = "black";
+      headerGenre.style.float = "left";
+      headerGenre.style.fontSize = "1.8em";
+      document.getElementById("main-logo").innerHTML = "";
+      document.getElementById("main-logo").classList.remove("col-5");
+      headerGenreDiv.classList.remove("col-7");
+      // headerGenreDiv.classList.remove("text-center");
+    }
+  };
+  function getScrollTop() {
+    if (typeof pageYOffset != "undefined") {
+      return pageYOffset;
+    } else {
+      var B = document.body; //IE 'quirks'
+      var D = document.documentElement; //IE with doctype
+      D = D.clientHeight ? D : B;
+      return D.scrollTop;
+    }
+  }
+</script>

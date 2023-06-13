@@ -1,0 +1,154 @@
+
+<head>
+  <meta property="og:type" content="website" />
+  <meta property="og:description" content="บล็อกที่มีเนื้อหาเกี่ยวข้องกับ {{title}}" />
+  <meta property="og:url" content="https://soiflix.com/genre/blog/{{genre_id}}" />
+</head>
+{% extends "layout.html" %} {% block content %}
+
+<div class="row">
+  <!--- Google Adsense --->
+  <div class="col-12 text-center google-ads">
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1334778057140315"
+      crossorigin="anonymous"
+    ></script>
+    <!-- soiflix main page -->
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <!--- End Google Adsense --->
+
+  <div class="row">
+    <p class="h3 text-white text-center mb-5">บล็อก{{genre_name}}:</p>
+  </div>
+
+    {%for post in blog_posts%}
+
+    <div class="col-12 col-md-6 col-lg-4">
+  <div class="row mb-3" style="--bs-gutter-x: 0rem;">
+    <div class="card text-white bg-dark mb-3">
+      <a href="/blog/{{post['id']}}" style="text-decoration: none;">
+        <div class="row g-0">
+          <div class="col-4">
+            <img
+              width="400"
+              height="150"
+              src="/static/post/thumbnail/{{post['thumbnail']}}"
+              class="img-fluid rounded-start"
+              alt="{{post['title']}}"
+              style="
+                width: 400px;
+                height: 150px;
+                object-fit: cover;
+                border-radius: 2%;
+              "
+            />
+          </div>
+          <div class="col-8">
+            <div class="card-body" style="                top: 50%;
+                position: absolute;
+                -ms-transform: translateY(-50%);
+                transform: translateY(-50%);
+">
+              <h6 class="card-title" style="color: white;">
+                {{post['title']}}
+              </h6>
+              <p class="card-text">
+                <small class="text-muted"
+                  >{{post['date_posted'] | convert_datetime_to_th_str |
+                  safe()}}</small
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+    </div>
+
+    {%endfor%}
+
+
+  <div class="row">
+    <div class="col-4">
+      <a
+        href="{{url}}{%if curr_page != 1%}{{curr_page - 1}}{%endif%}"
+        {%if curr_page == 1%}
+        class="disabled"
+        {%endif%}
+      >
+        <button
+          type="button"
+          class="btn {%if (curr_page - 1) == 0%}btn-secondary{%else%}btn-primary{%endif%} btn-lg"
+          style="width: 100%; font-size: 1em"
+        >
+        ก่อนหน้า
+        </button>
+      </a>
+    </div>
+    <div class="col-4">
+      <select
+        class="form-control"
+        aria-label="Default select example"
+        style="width: 100%;"
+        onchange="location = this.options[this.selectedIndex].value;"
+      >
+        {% for _ in range(0, num_page) %} {%if loop.index == curr_page %}
+        <option value="{{url}}{{loop.index}}" selected>
+          {{ loop.index }}</option
+        >
+        {%else%}
+        <option value="{{url}}{{loop.index}}"> {{ loop.index }}</option>
+
+        {%endif%} {% endfor %}
+      </select>
+    </div>
+    <div class="col-4">
+      <a
+        href="{{url}}{%if curr_page != num_page%}{{curr_page + 1}}{%else%}{{curr_page}}{%endif%}"
+
+        {%if curr_page == num_page%}
+        class="disabled"
+        {%endif%}
+      >
+        <button
+          type="button"
+          class="btn {%if curr_page == num_page%}btn-secondary{%else%}btn-primary{%endif%} btn-lg"
+          style="width: 100%; font-size: 1em"
+        >
+        ต่อไป
+        </button>
+      </a>
+    </div>
+  </div>
+  <!--- Google Adsense --->
+  <div class="col-12 text-center google-ads">
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1334778057140315"
+      crossorigin="anonymous"
+    ></script>
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <!--- End Google Adsense --->
+</div>
+{% endblock %}

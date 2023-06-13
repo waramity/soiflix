@@ -1,0 +1,410 @@
+<head>
+  <meta property="og:type" content="article" />
+  <meta property="og:description" content="{{post['content']|striptags}}" />
+  <meta property="og:url" content="https://soiflix.com/blog/{{post['id']}}" />
+  <meta property="article:published_time" content="{{post['date_posted']}}" />
+  <meta
+    property="og:image"
+    content="https://soiflix.com/static/post/thumbnail/{{post['thumbnail']}}"
+  />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="1200" />
+  <meta property="og:image:type" content="image/jpgeg" />
+</head>
+{% extends "layout.html" %} {% block content %}
+
+<!-- font-size: 0.9375rem; -->
+<style>
+    .post-content p {
+      color: #e4e6eb;
+      font-size: 1.019rem;
+      font-weight: 400;
+      line-height: 1.669;
+      letter-spacing: 0.000rem;
+  }
+    }
+
+    .post-content h1 {
+      color: #e4e6eb;
+    }
+
+    .post-content h2 {
+      color: #e4e6eb;
+    }
+
+    .post-content h3 {
+      color: #e4e6eb;
+    }
+
+    .post-content h4 {
+      color: #e4e6eb;
+    }
+
+    .post-content h5 {
+      color: #e4e6eb;
+    }
+
+    .post-content h6 {
+      color: #e4e6eb;
+    }
+
+    .post-content img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    .post-content {
+      width: 100vw;
+      position: relative;
+      left: calc(-1 * (100vw - 100%) / 2);
+    }
+
+    iframe {
+      width: 100%;
+      height: 400px;
+    }
+
+    @media (min-width: 750px) {
+      .blog {
+        max-width: 750px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      .post-content {
+        width: 100%;
+        position: static;
+        left: 0;
+      }
+    }
+</style>
+<article>
+  <div class="blog mx-auto">
+    {%if request.MOBILE%}
+    <img
+      src="/static/post/thumbnail/{{post['thumbnail']}}"
+      style="
+        width: 100vw;
+        position: relative;
+        left: calc(-1 * (100vw - 100%) / 2);
+      "
+      alt="{{post['title']}}"
+    />
+    {%else%}
+    <img
+      src="/static/post/thumbnail/{{post['thumbnail']}}"
+      style="width: 100%; object-fit: cover; object-position: 100%;"
+      alt="{{post['title']}}"
+    />
+    {%endif%}
+
+    <div
+      class="col-12 post-content pt-4 ps-3 pe-3"
+      style="background-color: #242526;"
+    >
+      {% for genre in post['genres']%}
+      <a
+        href="/genre/blog/{{genre['id']}}"
+        style="text-decoration: none; color: white;"
+      >
+        <button type="button" class="btn btn-outline-light mb-3 me-2">
+          {{genre['name']}}
+        </button>
+      </a>
+      {%endfor%}
+      <h1
+        class="display-6 mb-3 mt-1"
+        style="line-height: 1.333; color: #e4e6eb; font-size: 1.555em;"
+      >
+        {{post['title']}}
+      </h1>
+
+      <h6 class="text-white mb-4">
+        {{post['date_posted'] | convert_datetime_to_th_str}}
+      </h6>
+
+      <hr
+        class="mb-5"
+        style="
+          height: 0.3em;
+          border-width: 0;
+          color: gray;
+          background-color: gray;
+        "
+      />
+      {{post['content'] | safe()}}
+    </div>
+
+    <div>
+      <p style="color: white;" class="mt-5">
+        TAGS: {% for genre in post['genres']%}
+        <a
+          href="/genre/blog/{{genre['id']}}"
+          style="text-decoration: none; color: white;"
+        >
+          <button type="button" class="btn btn-outline-light ms-2">
+            {{genre['name']}}
+          </button>
+        </a>
+        {%endfor%}
+      </p>
+    </div>
+
+    <hr
+      style="
+        height: 0.5em;
+        border-width: 0;
+        color: gray;
+        background-color: gray;
+        margin-top: 3em;
+        margin-bottom: 3em;
+      "
+    />
+    <div class="row">
+      <p class="h3 text-white text-center">แชร์โพสต์นี้:</p>
+    </div>
+
+    <div class="row mt-3">
+      <span style="vertical-align: -0.1875em;" class="text-center text-white">
+        <a
+          href="https://www.facebook.com/share.php?u=https://soiflix.com/blog/{{post['id']}}"
+          style="text-decoration: none; color: white;"
+        >
+          <svg
+            xmlns="http://www.w4.org/2000/svg"
+            width="32"
+            height="32"
+            fill="currentColor"
+            class="bi bi-facebook"
+            viewBox="0 0 16 16"
+            style="margin-right: 1em;"
+          >
+            <path
+              d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"
+            />
+          </svg>
+        </a>
+
+        <a
+          href="https://twitter.com/share?url=https://soiflix.com/blog/{{post['id']}}"
+          style="text-decoration: none; color: white;"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            fill="currentColor"
+            class="bi bi-twitter"
+            viewBox="0 0 16 16"
+            style="margin-right: 1em;"
+          >
+            <path
+              d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"
+            />
+          </svg>
+        </a>
+
+        <a
+          href="https://lineit.line.me/share/ui?url=https://soiflix.com/blog/{{post['id']}}"
+          style="text-decoration: none; color: white;"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            fill="currentColor"
+            class="bi bi-line"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M8 0c4.411 0 8 2.912 8 6.492 0 1.433-.555 2.723-1.715 3.994-1.678 1.932-5.431 4.285-6.285 4.645-.83.35-.734-.197-.696-.413l.003-.018.114-.685c.027-.204.055-.521-.026-.723-.09-.223-.444-.339-.704-.395C2.846 12.39 0 9.701 0 6.492 0 2.912 3.59 0 8 0ZM5.022 7.686H3.497V4.918a.156.156 0 0 0-.155-.156H2.78a.156.156 0 0 0-.156.156v3.486c0 .041.017.08.044.107v.001l.002.002.002.002a.154.154 0 0 0 .108.043h2.242c.086 0 .155-.07.155-.156v-.56a.156.156 0 0 0-.155-.157Zm.791-2.924a.156.156 0 0 0-.156.156v3.486c0 .086.07.155.156.155h.562c.086 0 .155-.07.155-.155V4.918a.156.156 0 0 0-.155-.156h-.562Zm3.863 0a.156.156 0 0 0-.156.156v2.07L7.923 4.832a.17.17 0 0 0-.013-.015v-.001a.139.139 0 0 0-.01-.01l-.003-.003a.092.092 0 0 0-.011-.009h-.001L7.88 4.79l-.003-.002a.029.029 0 0 0-.005-.003l-.008-.005h-.002l-.003-.002-.01-.004-.004-.002a.093.093 0 0 0-.01-.003h-.002l-.003-.001-.009-.002h-.006l-.003-.001h-.004l-.002-.001h-.574a.156.156 0 0 0-.156.155v3.486c0 .086.07.155.156.155h.56c.087 0 .157-.07.157-.155v-2.07l1.6 2.16a.154.154 0 0 0 .039.038l.001.001.01.006.004.002a.066.066 0 0 0 .008.004l.007.003.005.002a.168.168 0 0 0 .01.003h.003a.155.155 0 0 0 .04.006h.56c.087 0 .157-.07.157-.155V4.918a.156.156 0 0 0-.156-.156h-.561Zm3.815.717v-.56a.156.156 0 0 0-.155-.157h-2.242a.155.155 0 0 0-.108.044h-.001l-.001.002-.002.003a.155.155 0 0 0-.044.107v3.486c0 .041.017.08.044.107l.002.003.002.002a.155.155 0 0 0 .108.043h2.242c.086 0 .155-.07.155-.156v-.56a.156.156 0 0 0-.155-.157H11.81v-.589h1.525c.086 0 .155-.07.155-.156v-.56a.156.156 0 0 0-.155-.157H11.81v-.589h1.525c.086 0 .155-.07.155-.156Z"
+            />
+          </svg>
+        </a>
+      </span>
+    </div>
+
+    <hr
+      style="
+        height: 0.5em;
+        border-width: 0;
+        color: gray;
+        background-color: gray;
+        margin-top: 3em;
+        margin-bottom: 3em;
+      "
+    />
+
+    <div class="row">
+      <p class="h3 text-white text-center mb-5">บล็อกอื่นๆ:</p>
+    </div>
+
+    <div class="row" id="another-blog-section">
+      {%for post in blog_posts%}
+
+      <div class="col-12 col-md-6">
+        <div class="row mb-3" style="--bs-gutter-x: 0rem;">
+          <div class="card text-white bg-dark mb-3">
+            <a href="/blog/{{post['id']}}" style="text-decoration: none;">
+              <div class="row g-0">
+                <div class="col-4">
+                  <img
+                    width="400"
+                    height="150"
+                    src="/static/post/thumbnail/{{post['thumbnail']}}"
+                    class="img-fluid rounded-start"
+                    alt="{{post['title']}}"
+                    style="
+                      width: 400px;
+                      height: 150px;
+                      object-fit: cover;
+                      border-radius: 2%;
+                    "
+                  />
+                </div>
+                <div class="col-8">
+                  <div
+                    class="card-body"
+                    style="
+                      top: 50%;
+                      position: absolute;
+                      -ms-transform: translateY(-50%);
+                      transform: translateY(-50%);
+                    "
+                  >
+                    <h6 class="card-title" style="color: white;">
+                      {{post['title']}}
+                    </h6>
+                    <p class="card-text">
+                      <small class="text-muted"
+                        >{{post['date_posted'] | convert_datetime_to_th_str |
+                        safe()}}</small
+                      >
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {%endfor%}
+    </div>
+  </div>
+</article>
+
+<div class="d-flex justify-content-center mb-3" id="sentinel">
+  <div class="spinner-border" role="status"></div>
+</div>
+
+<template id="blog_post_template">
+  <div class="col-12 col-md-6">
+    <div class="row mb-3" style="--bs-gutter-x: 0rem;">
+      <div class="card text-white bg-dark mb-3">
+        <a href="" style="text-decoration: none; color: white;" id="blog-url">
+          <div class="row g-0">
+            <div class="col-4">
+              <img
+                width="400"
+                height="150"
+                src=""
+                class="img-fluid rounded-start"
+                alt=""
+                style="
+                  width: 400px;
+                  height: 150px;
+                  object-fit: cover;
+                  border-radius: 2%;
+                "
+              />
+            </div>
+            <div class="col-8">
+              <div
+                class="card-body"
+                style="
+                  top: 50%;
+                  position: absolute;
+                  -ms-transform: translateY(-50%);
+                  transform: translateY(-50%);
+                "
+              >
+                <h6 class="card-title"></h6>
+                <p class="card-text">
+                  <small class="text-muted"></small>
+                </p>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>
+<!-- template schema, hidden from the dom -->
+<script>
+  var blog_template = document.querySelector("#blog_post_template");
+  var blog_counter = 1;
+  function loadBlogItems(req_url, div_id) {
+    // var scroller = document.querySelector("#scroller");
+    var blog_scroller = document.querySelector(div_id);
+    // Get references to the dom elements
+
+    // Set a counter to count the items loaded
+
+    // Function to request new items and render to the dom
+    // Use fetch to request data and pass the counter value in the QS
+    req_url_full_link = `${req_url}?c=${blog_counter}`;
+
+    fetch(req_url_full_link).then((response) => {
+      // Convert the response data to JSON
+      response.json().then((data) => {
+        // Iterate over the items in the response
+        for (var i = 0; i < data.length; i++) {
+          // Clone the HTML template
+          let blog_template_clone = blog_template.content.cloneNode(true);
+
+          // Query & update the template content
+          blog_template_clone.querySelector(
+            ".card-title"
+          ).innerHTML = `${data[i]["title"]}`;
+          blog_template_clone.querySelector(".img-fluid").src =
+            "/static/post/thumbnail/" + data[i]["thumbnail"];
+          blog_template_clone.querySelector(".img-fluid").alt =
+            data[i]["title"];
+          blog_template_clone.querySelector(".text-muted").innerHTML =
+            data[i]["date"];
+          blog_template_clone.querySelector("#blog-url").href =
+            "/blog/" + String(data[i]["id"]);
+
+          blog_scroller.appendChild(blog_template_clone);
+        }
+
+        blog_counter += 1;
+      });
+    });
+  }
+
+  // Create a new IntersectionObserver instance
+  var intersectionObserver = new IntersectionObserver((entries) => {
+    // Uncomment below to see the entry.intersectionRatio when
+    // the sentinel comes into view
+
+    // entries.forEach(entry => {
+    //   console.log(entry.intersectionRatio);
+    // })
+
+    // If intersectionRatio is 0, the sentinel is out of view
+    // and we don't need to do anything. Exit the function
+    if (entries[0].intersectionRatio <= 0) {
+      return;
+    }
+
+    // Call the loadItems function
+    loadBlogItems("/load-mobile-random-blog-content", "#another-blog-section");
+  });
+
+  // Instruct the IntersectionObserver to watch the sentinel
+  intersectionObserver.observe(sentinel);
+</script>
+{% endblock %}

@@ -1,0 +1,52 @@
+<!------------------------------------------------------->
+<div style="clear: both;">
+  <a href="/movie/genres/new-release">
+    <h2 class="mobile-tablet__topic-header" style="float: left;">
+      หนังใหม่และล่าสุด
+    </h2>
+
+    <h3
+      class="mobile-tablet__topic-header"
+      style="float: right; font-weight: 200;"
+    >
+      ดูทั้งหมด >
+    </h3>
+  </a>
+</div>
+
+<div class="nopadding">
+  <div
+    class="list-group flex-row table-responsive new-content-list-group"
+    id="list-tab"
+    role="tablist"
+    style="overflow-y: hidden; margin-bottom: 3em;"
+    onmousedown="return false"
+  >
+    {%if new_vdo != []%} {%for content in new_vdo%}
+    <div
+      class="col-10 col-sm-5 movie__cover nopadding"
+      style="margin-right: 5px;"
+    >
+      {{content | tablet_thumbnail_filter_new_release | safe()}}
+    </div>
+    {%endfor%} {%endif%}
+  </div>
+</div>
+<div style="background-color: black;">
+  <div
+    class="row"
+    style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;"
+  >
+    <div id="main-logo"></div>
+    <div id="header-genre-div">
+      <h2
+        style="font-weight: bold; color: #d3dedc; font-size: 1.8em;"
+        id="header-genre"
+      >
+        หนัง
+      </h2>
+    </div>
+  </div>
+</div>
+
+<!--- End Mobile Section--->

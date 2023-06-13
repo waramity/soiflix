@@ -1,0 +1,472 @@
+{% extends "layout.html" %} {% block content %}
+
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/swiper@7/swiper-bundle.min.css"
+/>
+
+<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+<style>
+  .swiper {
+    width: 100%;
+    margin: auto;
+    overflow: visible;
+  }
+
+  .swiper-slide {
+    font-size: 18px;
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+  }
+  .swiper-slide.swiper-slide-active,
+  .swiper-slide.swiper-slide-next,
+  .swiper-slide.swiper-slide-prev {
+    visibility: visible;
+  }
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: white;
+    top: 0;
+    padding: 100px 20px;
+    margin: 0;
+  }
+  .swiper-pagination-bullet {
+    background-color: white;
+  }
+  .swiper-pagination {
+    z-index: 0;
+    text-align: right;
+    padding-top: 250px;
+  }
+</style>
+
+<script>
+  function dragScrollBrowser(className) {
+    const slider = document.querySelector(className);
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    slider.addEventListener("mousedown", (e) => {
+      isDown = true;
+      slider.classList.add("active");
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+    });
+    slider.addEventListener("mouseleave", () => {
+      isDown = false;
+      slider.classList.remove("active");
+    });
+    slider.addEventListener("mouseup", () => {
+      isDown = false;
+      slider.classList.remove("active");
+    });
+    slider.addEventListener("mousemove", (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 3; //scroll-fast
+      slider.scrollLeft = scrollLeft - walk;
+      // console.log(walk);
+    });
+  }
+</script>
+<div class="row">
+  <!--------Section 1--------->
+
+  <div
+    class="col-12 col-lg-12 col-xl-6 mobile-tablet-hidden"
+    style="margin-top: 5px;"
+  >
+    <div
+      id="carouselExampleCaptions"
+      class="carousel slide"
+      data-bs-ride="carousel"
+      style="margin-top: 15px;"
+    >
+      <div class="carousel-indicators">
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="0"
+          class="active"
+          aria-current="true"
+          aria-label="Slide 1"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="1"
+          aria-label="Slide 2"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="2"
+          aria-label="Slide 3"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="3"
+          aria-label="Slide 4"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="4"
+          aria-label="Slide 5"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="5"
+          aria-label="Slide 6"
+        ></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <a
+            class="movie__link"
+            href="{{url_for('main.movie', id=suggest_program[0]['id'])}}"
+          >
+            <img
+              src="/static/movies/thumbnail/{{suggest_program[0]['thumbnail']}}"
+              class="d-block w-100"
+              alt="..."
+            />
+          </a>
+        </div>
+        {% for program in suggest_program[1:6] %}
+
+        <div class="carousel-item">
+          <a
+            class="movie__link"
+            href="{{url_for('main.movie', id=program['id'])}}"
+          >
+            <img
+              src="/static/movies/thumbnail/{{program['thumbnail']}}"
+              class="d-block w-100"
+              alt="..."
+            />
+          </a>
+        </div>
+        {%endfor%}
+      </div>
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="col-12 col-lg-12 col-xl-6 mobile-tablet-hidden"
+    style="margin-top: 10px;"
+  >
+    <div class="row">
+      {% for program in suggest_program[6:] %}
+      <div class="col-6 col-lg-6 movie__cover" style="margin-top: 5px;">
+        <a
+          class="movie__link"
+          href="{{url_for('main.movie', id=program['id'])}}"
+        >
+          <img
+            class="suggest__thumbnail"
+            src="/static/movies/thumbnail/{{program['thumbnail']}}"
+            alt="{{program['title']}}"
+          />
+        </a>
+      </div>
+      {%endfor%}
+    </div>
+  </div>
+
+  <!--------End Section 1--------->
+  <div class="mobile-tablet-display nopadding">
+    <div
+      class="list-group flex-row text-nowrap table-responsive"
+      id="list-tab"
+      role="tablist"
+      style="
+        font-size: 80%;
+        overflow-y: hidden;
+        height: 100%;
+        border-bottom: 0.5px solid #808080;
+      "
+    >
+      <button type="button" class="btn btn-light genre-btn" id="all-content">
+        ทั้งหมด
+      </button>
+      <button
+        type="button"
+        class="btn btn-dark genre-btn"
+        id="continue-content"
+      >
+        ดูต่อ
+      </button>
+      <button type="button" class="btn btn-dark genre-btn" id="new-release">
+        ใหม่และล่าสุด
+      </button>
+      {%for genre in genre_list_group%}
+      <button
+        type="button"
+        class="btn btn-dark genre-btn"
+        id="{{genre['genre_name']}}"
+      >
+        {{genre["genre_name"]}}
+      </button>
+      {%endfor%}
+    </div>
+  </div>
+  <script>
+    $(".genre-btn").click(function () {
+      let genre_list_group_scroll_position = $("#list-tab").scrollLeft();
+      let genre_json = {
+        genre_list_group_scroll_position: genre_list_group_scroll_position,
+      };
+      var genre_id = $(this).attr("id");
+      if (genre_id == "all-content") {
+        var url = "/";
+      } else {
+        var url = "/genre/" + genre_id + "/" + genre_list_group_scroll_position;
+      }
+      // Simulate an HTTP redirect:
+      window.location.href = url;
+    });
+  </script>
+  <script>
+    dragScrollBrowser(".list-group");
+  </script>
+
+  <!--- Google Adsense --->
+  <div class="col-12 text-center google-ads">
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1334778057140315"
+      crossorigin="anonymous"
+    ></script>
+    <!-- soiflix main page -->
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <!--- End Google Adsense --->
+  <!--- Mobile Section--->
+
+  <!------------------------------------------------------->
+  <div class="mobile-tablet-display" style="clear: both;">
+    <a href="/movie/genres/new-release">
+      <h2 class="mobile-tablet__topic-header" style="float: left;">
+        หนังใหม่และล่าสุด
+      </h2>
+
+      <h3
+        class="mobile-tablet__topic-header"
+        style="float: right; font-weight: 200;"
+      >
+        ดูทั้งหมด >
+      </h3>
+    </a>
+  </div>
+
+  <div class="mobile-tablet-display nopadding">
+    <div
+      class="list-group flex-row table-responsive new-content-list-group"
+      id="list-tab"
+      role="tablist"
+      style="overflow-y: hidden; margin-bottom: 3em;"
+      onmousedown="return false"
+    >
+      {%if new_vdo != []%} {%for content in new_vdo%}
+      <div
+        class="col-10 col-sm-5 movie__cover nopadding"
+        style="margin-right: 5px;"
+      >
+        {{content | tablet_thumbnail_filter_new_release | safe()}}
+      </div>
+      {%endfor%} {%endif%}
+    </div>
+  </div>
+  <script>
+    dragScrollBrowser(".new-content-list-group");
+  </script>
+  <div
+    id="sticky-header"
+    class="mobile-tablet-display"
+    style="
+      background-color: black;
+      position: -webkit-sticky; /* Safari & IE */
+      position: sticky;
+      z-index: 1000;
+      top: 0;
+    "
+    onclick="topFunction()"
+  >
+    <div
+      class="row"
+      style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;"
+    >
+      <div id="main-logo"></div>
+      <div id="header-genre-div">
+        <h2
+          style="font-weight: bold; color: #d3dedc; font-size: 1.8em;"
+          id="header-genre"
+        >
+          หนัง
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.onscroll = function () {
+      var bar = document.getElementById("sticky-header");
+      var headerGenre = document.getElementById("header-genre");
+      var headerGenreDiv = document.getElementById("header-genre-div");
+      if (getScrollTop() > 1000) {
+        bar.style.backgroundColor = "#212529";
+        headerGenre.style.float = "right";
+        headerGenreDiv.style.margin = "auto";
+        headerGenre.style.fontSize = "1.2em";
+        document.getElementById("main-logo").innerHTML =
+          '<img src="/static/logo.png" style="width: 80%;" />';
+        document.getElementById("main-logo").classList.add("col-5");
+        headerGenreDiv.classList.add("col-7");
+        // headerGenreDiv.classList.add("text-center");
+      } else {
+        bar.style.backgroundColor = "black";
+        headerGenre.style.float = "left";
+        headerGenre.style.fontSize = "1.8em";
+        document.getElementById("main-logo").innerHTML = "";
+        document.getElementById("main-logo").classList.remove("col-5");
+        headerGenreDiv.classList.remove("col-7");
+        // headerGenreDiv.classList.remove("text-center");
+      }
+    };
+    function getScrollTop() {
+      if (typeof pageYOffset != "undefined") {
+        return pageYOffset;
+      } else {
+        var B = document.body; //IE 'quirks'
+        var D = document.documentElement; //IE with doctype
+        D = D.clientHeight ? D : B;
+        return D.scrollTop;
+      }
+    }
+  </script>
+  <!--- End Mobile Section--->
+  <div class="mobile-tablet-hidden">
+    {{new_vdo|swiper_template("หนังใหม่และล่าสุด", "new-release",
+    "new-release")|safe()}} {{action_movies|swiper_template("หนังแอ็คชั่น",
+    "แอ็คชั่น", "action-movie")|safe()}}
+    {{horror_movies|swiper_template("หนังสยองขวัญ", "สยองขวัญ",
+    "horrors")|safe()}}
+
+    <!--- Google Adsense --->
+    <div class="col-12 text-center google-ads">
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1334778057140315"
+        crossorigin="anonymous"
+      ></script>
+      <!-- soiflix main page -->
+      <ins
+        class="adsbygoogle"
+        style="display: inline-block; width: 728px; height: 90px;"
+        data-ad-client="ca-pub-1334778057140315"
+        data-ad-slot="8411748038"
+      ></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+    <!--- End Google Adsense --->
+    {{comedy_movies|swiper_template("หนังตลกคอมเมดี้", "คอมเมดี้",
+    "comedy")|safe()}} {{crime_movies|swiper_template("หนังอาชญากรรม",
+    "อาชญากรรม", "crime")|safe()}}
+    {{classic_movies|swiper_template("หนังคลาสสิค", "คลาสสิค",
+    "classic")|safe()}}{{drama_movies|swiper_template("หนังดราม่า", "ดราม่า",
+    "drama")|safe()}} {{romance_movies|swiper_template("หนังโรแมนติก",
+    "โรแมนติก", "romance")|safe()}}
+  </div>
+
+  {% for vdo in mobile_tablet_vdo %}
+  <div
+    class="col-12 col-md-6 col-lg-6 col-xl-2 movie__cover mobile-tablet-display nopadding"
+  >
+    {{vdo | genre_filter | safe()}}
+  </div>
+  {%if loop.index % 8 == 0%}
+  <div class="col-12 text-center google-ads mobile-tablet-display">
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1334778057140315"
+      crossorigin="anonymous"
+    ></script>
+    <!-- soiflix main page -->
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  {%endif%} {% endfor %}
+
+  <!--- Google Adsense --->
+  <div class="col-12 text-center google-ads">
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1334778057140315"
+      crossorigin="anonymous"
+    ></script>
+    <!-- soiflix main page -->
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <!--- End Google Adsense --->
+</div>
+{% endblock %}

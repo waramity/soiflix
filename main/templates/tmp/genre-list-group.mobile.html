@@ -1,0 +1,25 @@
+<div class="nopadding">
+  <!-- class="list-group flex-row text-nowrap table-responsive new-content-list-group" -->
+  <div
+    class="list-group flex-row table-responsive"
+    id="list-tab"
+    role="tablist"
+    style="overflow-y: hidden; margin-bottom: 3em;"
+    onmousedown="return false"
+  >
+    {%for genre in genre_list_group_image_for_browser%}
+    <div
+      class="col-4 col-sm-3 movie__cover nopadding"
+      style="margin-right: 5px;"
+    >
+      <a href="/genre/{{genre['genre_id']}}">
+        <img
+          data-src="/static/genre-icon/{{genre['genre_image']}}.jpg"
+          style="width: 100%;"
+          class="genre__cover lazyload"
+        />
+      </a>
+    </div>
+    {%endfor%}
+  </div>
+</div>

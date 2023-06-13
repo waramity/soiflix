@@ -1,0 +1,296 @@
+<head>
+  <meta property="og:type" content="website" />
+  <meta
+    property="og:description"
+    content="หนังมันส์ทั้งเก่าและใหม่ ดูจนตาแฉะแบบฟรีๆได้ที่นี่ที่เดียว Soiflix"
+  />
+  <meta property="og:url" content="https://soiflix.com/movies" />
+  <meta property="og:image" content="" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="1200" />
+  <meta property="og:image:type" content="image/jpgeg" />
+</head>
+
+{% extends "layout.html" %} {% block content %}
+
+<style>
+  .swiper {
+    width: 100%;
+    margin: auto;
+    overflow: visible;
+  }
+
+  .swiper-slide {
+    font-size: 18px;
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+  }
+  .swiper-slide.swiper-slide-active,
+  .swiper-slide.swiper-slide-next,
+  .swiper-slide.swiper-slide-prev {
+    visibility: visible;
+  }
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: white;
+    top: 0;
+    padding: 100px 20px;
+    margin: 0;
+  }
+  .swiper-pagination-bullet {
+    background-color: white;
+  }
+  .swiper-pagination {
+    z-index: 0;
+    text-align: right;
+    padding-top: 250px;
+  }
+</style>
+
+<div class="row">
+  <!--------Section 1--------->
+
+  <div class="col-12 col-lg-12 col-xl-6" style="margin-top: 5px;">
+    <div
+      id="carouselExampleCaptions"
+      class="carousel slide"
+      data-bs-ride="carousel"
+      style="margin-top: 15px;"
+    >
+      <div class="carousel-indicators">
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="0"
+          class="active"
+          aria-current="true"
+          aria-label="Slide 1"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="1"
+          aria-label="Slide 2"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="2"
+          aria-label="Slide 3"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="3"
+          aria-label="Slide 4"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="4"
+          aria-label="Slide 5"
+        ></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="5"
+          aria-label="Slide 6"
+        ></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <a
+            class="movie__link"
+            href="{{url_for('main.movie', id=suggest_program[0]['id'])}}"
+          >
+            <img
+              src="/static/movies/thumbnail/{{suggest_program[0]['thumbnail']}}"
+              class="d-block w-100"
+              alt="..."
+            />
+          </a>
+        </div>
+        {% for program in suggest_program[1:6] %}
+
+        <div class="carousel-item">
+          <a
+            class="movie__link"
+            href="{{url_for('main.movie', id=program['id'])}}"
+          >
+            <img
+              src="/static/movies/thumbnail/{{program['thumbnail']}}"
+              class="d-block w-100"
+              alt="..."
+            />
+          </a>
+        </div>
+        {%endfor%}
+      </div>
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-12 col-xl-6" style="margin-top: 10px;">
+    <div class="row">
+      {% for program in suggest_program[6:] %}
+      <div class="col-6 col-lg-6 movie__cover" style="margin-top: 5px;">
+        <a
+          class="movie__link"
+          href="{{url_for('main.movie', id=program['id'])}}"
+        >
+          <img
+            class="suggest__thumbnail"
+            src="/static/movies/thumbnail/{{program['thumbnail']}}"
+            alt="{{program['title']}}"
+          />
+        </a>
+      </div>
+      {%endfor%}
+    </div>
+  </div>
+
+  <!--------End Section 1--------->
+
+  <!--- Google Adsense --->
+  <div class="col-12 text-center google-ads">
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1334778057140315"
+      crossorigin="anonymous"
+    ></script>
+    <!-- soiflix main page -->
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <!--- End Google Adsense --->
+  {{trending_content|swiper_template("หนังยอดนิยม", "ยอดนิยม",
+  "trending_content")|safe()}} {{new_vdo|swiper_template("หนังใหม่และล่าสุด",
+  "new-release", "new-release")|safe()}}
+
+  <!--- Google Adsense --->
+  <div class="col-12 text-center google-ads">
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1334778057140315"
+      crossorigin="anonymous"
+    ></script>
+    <!-- soiflix main page -->
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <!--- End Google Adsense --->
+  {{action_movies|swiper_template("หนังแอ็คชั่น", "แอ็คชั่น",
+  "action-movie")|safe()}} {{horror_movies|swiper_template("หนังสยองขวัญ",
+  "สยองขวัญ", "horrors")|safe()}}
+
+  <!--- Google Adsense --->
+  <div class="col-12 text-center google-ads">
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1334778057140315"
+      crossorigin="anonymous"
+    ></script>
+    <!-- soiflix main page -->
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <!--- End Google Adsense --->
+  {{comedy_movies|swiper_template("หนังตลกคอมเมดี้", "คอมเมดี้",
+  "comedy")|safe()}} {{crime_movies|swiper_template("หนังอาชญากรรม",
+  "อาชญากรรม", "crime")|safe()}}
+
+  <!--- Google Adsense --->
+  <div class="col-12 text-center google-ads">
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1334778057140315"
+      crossorigin="anonymous"
+    ></script>
+    <!-- soiflix main page -->
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <!--- End Google Adsense --->
+
+  {{classic_movies|swiper_template("หนังคลาสสิค", "คลาสสิค",
+  "classic")|safe()}}{{drama_movies|swiper_template("หนังดราม่า", "ดราม่า",
+  "drama")|safe()}} {{romance_movies|swiper_template("หนังโรแมนติก", "โรแมนติก",
+  "romance")|safe()}}
+
+  <!--- Google Adsense --->
+  <div class="col-12 text-center google-ads">
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1334778057140315"
+      crossorigin="anonymous"
+    ></script>
+    <!-- soiflix main page -->
+    <ins
+      class="adsbygoogle"
+      style="display: inline-block; width: 728px; height: 90px;"
+      data-ad-client="ca-pub-1334778057140315"
+      data-ad-slot="8411748038"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+  <!--- End Google Adsense --->
+</div>
+{% endblock %}
